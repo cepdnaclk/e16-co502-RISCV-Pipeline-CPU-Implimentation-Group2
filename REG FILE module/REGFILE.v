@@ -1,25 +1,30 @@
-module reg_file(IN,OUT1,OUT2,INADDRESS,OUT1ADDRESS,OUT2ADDRESS,WRITE,CLK,RESET); 		//register file
-	input [4:0] OUT1ADDRESS,OUT2ADDRESS,INADDRESS;   //5 bit addresses
+//       #########         REG FILE        ########
+
+//Delays should be introduced..
+
+module reg_file(IN,OUT1,OUT2,INADDRESS,OUT1ADDRESS,OUT2ADDRESS,WRITE,CLK,RESET);
+
+	input [4:0] OUT1ADDRESS,OUT2ADDRESS,INADDRESS;    //5 bit addresses
 	input [31:0] IN;
 	input CLK,RESET;
-	input WRITE;
+	input WRITE;                                    //write_enable signal
 	output wire [31:0] OUT1,OUT2;
-	integer n;
-	reg [31:0] regFile [0:31];	                  //regfile 32 registers with 32 bits
+	integer n;                                      //variable for iterations
+	reg [31:0] regFile [0:31];	                    //regfile 32 registers with 32 bits
 	
-	assign OUT1 = regFile[OUT1ADDRESS];           //register read
+	assign OUT1 = regFile[OUT1ADDRESS];             //register read
 	assign OUT2 = regFile[OUT2ADDRESS];
 
-	always @(posedge CLK) begin 	              //writing to the register file
+	always @(posedge CLK) begin 	                //writing to the register file
 	    if(WRITE == 1'b1 && RESET != 1'b1 )begin
-		regFile[INADDRESS] = IN;                  //Writing to the corresponding register
+		regFile[INADDRESS] = IN;                    //Writing to the corresponding register
 		end
 	end
 	
-	always@(RESET) begin                          //level triggered RESET 
+	always@(RESET) begin                            //level triggered RESET 
 	 if(RESET==1'b1) begin
 	     for(n=0; n<32;n=n+1)regFile[n] = 0;                      
-	     end
+	 end
      end
 endmodule
 
@@ -40,9 +45,9 @@ module regfile_testbed();		//testbed of register file
 	begin
 		$dumpfile("wavedata.vcd");
 		$dumpvars(0,regfile_testbed);	
-		 CLK = 1'b1;
-		 
-		      //assigning values
+		CLK = 1'b1;
+		
+	    //assigning values
         RESET = 1'b0;
         WRITE = 1'b0;
         
@@ -62,7 +67,7 @@ module regfile_testbed();		//testbed of register file
         #1
         OUT1ADDRESS = 5'd2;
 		
-		  #8
+		#8
         RESET = 1'b0;
         
         #9

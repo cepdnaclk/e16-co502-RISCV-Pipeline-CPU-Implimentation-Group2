@@ -1,3 +1,8 @@
+//       #########         ALU        ########
+
+//Delays should be introduced..
+
+
 module alu(DATA1,DATA2,RESULT,SELECT);	//module for ALU
     input [31:0]DATA1,DATA2;                                             //define 32bit tw0 inputs DATA1 and DATA2
 	input [4:0] SELECT;                                                  //define 5bit SELECT port
