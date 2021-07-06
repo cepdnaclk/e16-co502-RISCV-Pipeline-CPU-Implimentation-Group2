@@ -5,18 +5,18 @@ module reg_file(IN,OUT1,OUT2,INADDRESS,OUT1ADDRESS,OUT2ADDRESS,WRITE,CLK,RESET);
 	input WRITE;
 	output wire [31:0] OUT1,OUT2;
 	integer n;
-	reg [31:0] regFile [0:31];	//regfile
+	reg [31:0] regFile [0:31];	                  //regfile 32 registers with 32 bits
 	
-	assign OUT1 = regFile[OUT1ADDRESS];   //register read with delay
+	assign OUT1 = regFile[OUT1ADDRESS];           //register read
 	assign OUT2 = regFile[OUT2ADDRESS];
 
-	always @(posedge CLK) begin 	//writing to the register file
+	always @(posedge CLK) begin 	              //writing to the register file
 	    if(WRITE == 1'b1 && RESET != 1'b1 )begin
-		regFile[INADDRESS] = IN;                //Writing to the corresponding register
+		regFile[INADDRESS] = IN;                  //Writing to the corresponding register
 		end
 	end
 	
-	always@(RESET) begin     //level triggered RESET 
+	always@(RESET) begin                          //level triggered RESET 
 	 if(RESET==1'b1) begin
 	     for(n=0; n<32;n=n+1)regFile[n] = 0;                      
 	     end
@@ -84,7 +84,7 @@ module regfile_testbed();		//testbed of register file
         WRITE = 1'b1;
         
         #10
-        IN = 31'd15;
+        IN = 32'd15;
         WRITE = 1'b1;
         
         #10
