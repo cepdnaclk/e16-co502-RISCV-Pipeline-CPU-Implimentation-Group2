@@ -18,7 +18,7 @@ module reg_file(IN,OUT1,OUT2,INADDRESS,OUT1ADDRESS,OUT2ADDRESS,WRITE,CLK,RESET);
 	
 	always@(RESET) begin     //level triggered RESET 
 	 if(RESET==1'b1) begin
-	     for(n=0; n<8;n=n+1)regFile[n] = 0;                      
+	     for(n=0; n<32;n=n+1)regFile[n] = 0;                      
 	     end
      end
 endmodule
@@ -26,10 +26,10 @@ endmodule
 
 
 module regfile_testbed();		//testbed of register file
-	reg [2:0] OUT1ADDRESS,OUT2ADDRESS,INADDRESS;
-	reg [7:0] IN;
+	reg [4:0] OUT1ADDRESS,OUT2ADDRESS,INADDRESS;
+	reg [31:0] IN;
 	reg CLK,RESET,WRITE;
-	wire [7:0] OUT1,OUT2;
+	wire [31:0] OUT1,OUT2;
 	integer i;
 
 	always #5 CLK = ~CLK;
@@ -48,51 +48,51 @@ module regfile_testbed();		//testbed of register file
         
         #1
         RESET = 1'b1;
-        OUT1ADDRESS = 3'd0;
-        OUT2ADDRESS = 3'd4;
+        OUT1ADDRESS = 5'd0;
+        OUT2ADDRESS = 5'd4;
         
         #5
-        INADDRESS = 3'd2;
-        IN = 8'd95;
+        INADDRESS = 5'd2;
+        IN = 32'd95;
         WRITE = 1'b1;
         
         #10
         WRITE = 1'b0;
         
         #1
-        OUT1ADDRESS = 3'd2;
+        OUT1ADDRESS = 5'd2;
 		
 		  #8
         RESET = 1'b0;
         
         #9
-        INADDRESS = 3'd1;
-        IN = 8'd28;
+        INADDRESS = 5'd1;
+        IN = 32'd28;
         WRITE = 1'b1;
-        OUT1ADDRESS = 3'd1;
-		 OUT2ADDRESS = 3'd2;
+        OUT1ADDRESS = 5'd1;
+		OUT2ADDRESS = 5'd2;
         
         #10
         WRITE = 1'b0;
-		  INADDRESS = 3'd6;
+		INADDRESS = 5'd6;
         IN = 8'd108;
-		OUT2ADDRESS = 3'd6;
+		OUT2ADDRESS = 5'd6;
         
         #10
-        INADDRESS = 3'd4;
-        IN = 8'd6;
+        INADDRESS = 5'd4;
+        IN = 32'd6;
         WRITE = 1'b1;
         
         #10
-        IN = 8'd15;
+        IN = 31'd15;
         WRITE = 1'b1;
         
         #10
         WRITE = 1'b0;
         
         #6
-        INADDRESS = 3'd1;
-        IN = 8'd50;
+        INADDRESS = 5'd1;
+        IN = 32'd50;
         WRITE = 1'b1;
         
         #5

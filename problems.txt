@@ -1,0 +1,2 @@
+1). in store word instructions when store bytes or half words 
+how the rest of the bits should be filled. don't care or 0.
