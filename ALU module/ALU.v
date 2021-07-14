@@ -3,10 +3,11 @@
 //Delays should be introduced..
 
 
-module alu(DATA1,DATA2,RESULT,SELECT);	//module for ALU
+module alu(DATA1,DATA2,RESULT,SELECT,zero_signal,sign_bit_signal,sltu_bit_signal);	//module for ALU
     input [31:0]DATA1,DATA2;                                             //define 32bit tw0 inputs DATA1 and DATA2
 	input [4:0] SELECT;                                                  //define 5bit SELECT port
 	output [31:0]RESULT;                                   	             //define 32bit output port
+	output     zero_signal,sign_bit_signal,sltu_bit_signal;
 	wire[31:0] ADD,SUB,AND,OR,XOR,
 			   SLL,SRL,SRA,
 			   MUL,MULH,MULHU,MULHSU,
@@ -14,6 +15,9 @@ module alu(DATA1,DATA2,RESULT,SELECT);	//module for ALU
 			   SLT,SLTU;                                       
     reg[31:0] RESULT;													 //(output is declared as type reg since it is used in procedural block)
 	
+	assign zero_signal=;
+	assign sign_bit_signal=RESULT[31];
+	assign sltu_bit_signal=SLTU[0];
 
 	//forwarding removed
 	// assign FORWARD=DATA2;                                  //forward DATA2 to output
