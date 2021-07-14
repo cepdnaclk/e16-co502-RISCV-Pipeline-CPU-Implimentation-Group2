@@ -3,7 +3,7 @@
 //Delays should be introduced..
 //compatible with the new datapath.. updated 6/7/2021
 
-module ControlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,mux5_select,memRead,memWrite,branch,jump,writeEnable,Immidiate,AlUop);          //control unit module
+module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,mux5_select,memRead,memWrite,branch,jump,writeEnable,Immidiate,AlUop);          //control unit module
 	
     //port declaration
     input  [31:0] Instruction;
@@ -21,10 +21,10 @@ module ControlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
     reg mux1_select,mux2_select,mux4_select,
             mux5_select,memRead,memWrite,branch,jump,writeEnable;
     wire [8:0] specific_OP;
-    reg[2:0] branch_Jump;
-    reg [2:0] Immidiate;
-    reg [3:0] instr_type;
-    reg [4:0] AlUop;
+    reg  [2:0] branch_Jump;
+    reg  [2:0] Immidiate;
+    reg  [3:0] instr_type;
+    reg  [4:0] AlUop;
 
 	always@(Instruction)begin
 	#1                                                      //decode delay
