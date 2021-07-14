@@ -12,11 +12,12 @@ module reg_file(IN,OUT1,OUT2,INADDRESS,OUT1ADDRESS,OUT2ADDRESS,WRITE,CLK,RESET);
 	integer n;                                      //variable for iterations
 	reg [31:0] regFile [0:31];	                    //regfile 32 registers with 32 bits
 	
-	assign OUT1 = regFile[OUT1ADDRESS];             //register read
-	assign OUT2 = regFile[OUT2ADDRESS];
+	assign #2 OUT1 = regFile[OUT1ADDRESS];             //register read
+	assign #2 OUT2 = regFile[OUT2ADDRESS];
 
 	always @(posedge CLK) begin 	                //writing to the register file
 	    if(WRITE == 1'b1 && RESET != 1'b1 )begin
+        #2                                         //reading delay
 		regFile[INADDRESS] = IN;                    //Writing to the corresponding register
 		end
 	end
