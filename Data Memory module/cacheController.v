@@ -14,6 +14,7 @@ module cacheController(
     input[31:0] writedata1;
     input[2:0] Tag1,Tag,Index;
     input mem_Busywait,read,write,clock,reset,hit,dirty;
+    
     output busywait,mem_Read,mem_Write;
     output[31:0] mem_Writedata;
     output[5:0] mem_Address;

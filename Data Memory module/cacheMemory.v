@@ -14,15 +14,15 @@ input               clock;
 input               reset;
 input               read;
 input               write;
-input[31:0]          address;            //32 bit address
-input[31:0]         writedata;           //32 bit input
-output[31:0]         readdata;           //32 bit output
+input[31:0]          address;            //TODO: should be 32 bit
+input[31:0]         writedata;           //TODO: should be 32 bit
+output[31:0]         readdata;           //TODO: should be 32 bit
 output           busywait;
 
 output           mem_Read,mem_Write;
-output[31:0]     mem_Writedata;
+output[31:0]     mem_Writedata;      //TODO: should be 32 bit
 output[5:0]      mem_Address;
-input [31:0]     mem_Readdata;
+input [31:0]     mem_Readdata;       //TODO: should be 32 bit
 input            mem_BusyWait; 
 input            Inst_hit;           //this signal is used to check wether theres a hit in instruction cache.
                                      //in other words using this, I identify wether the instruction is correct for the respective PC.
@@ -56,8 +56,8 @@ wire comparatorOut;
 wire hit,dirty;
 wire[2:0] comparatorTagIN;
 assign comparatorTagIN = cacheTag[Index];
-comparator  e16203_comparator(Tag,comparatorTagIN,comparatorOut);
-ANDgate     e16203_ANDgate(cacheValid[Index],comparatorOut,hit);
+comparator  group2_comparator(Tag,comparatorTagIN,comparatorOut);
+ANDgate     group2_ANDgate(cacheValid[Index],comparatorOut,hit);
 
 /*for future usage*/
 assign dirty = cacheDirty[Index];
@@ -67,7 +67,7 @@ assign dirty = cacheDirty[Index];
 wire[7:0] dataExtractMuxOut;
 wire[31:0] data;
 assign data = cache[Index];
-multiplexerType4   e16203_dataExtractMux(data[7:0],data[15:8],data[23:16],data[31:24],dataExtractMuxOut,Offset);
+multiplexerType4   group2_dataExtractMux(data[7:0],data[15:8],data[23:16],data[31:24],dataExtractMuxOut,Offset);
 wire readdata;
 assign #1 readdata = dataExtractMuxOut;
 
@@ -98,13 +98,13 @@ always@(posedge clock)begin
 
     case(Offset)                         //then set the input data into correct place in the cache block
     2'b11:
-        cache[Index][31:24] = writedata;
+        cache[Index][31:24] = writedata;   //TODO: should be 32 bit
     2'b10:
-        cache[Index][23:16] = writedata;
+        cache[Index][23:16] = writedata;   //TODO: should be 32 bit
     2'b01:
-        cache[Index][15:8] = writedata;
+        cache[Index][15:8] = writedata;    //TODO: should be 32 bit
     2'b00: 
-        cache[Index][7:0] = writedata;
+        cache[Index][7:0] = writedata;     //TODO: should be 32 bit
     endcase 
     end	
 end
