@@ -49,8 +49,6 @@ module alu(DATA1,DATA2,RESULT,SELECT,zero_signal,sign_bit_signal,sltu_bit_signal
 	assign SLT = ($signed(DATA1) < $signed(DATA2)) ? 32'd1 : 32'd0;         // set less than (signed)
     assign SLTU = ($unsigned(DATA1) < $unsigned(DATA2)) ? 32'd1 : 32'd0;    // set less than (unsigned)
 
-
-
 	always@(*)                          //always block calls whenever a signal changes
 	begin
 		case(SELECT)
