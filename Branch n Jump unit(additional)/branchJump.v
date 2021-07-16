@@ -1,4 +1,4 @@
-//       #########         Branch and Jump unit        ########
+//       #########         Branch and Jump unit(not completed)        ########
 
 //Delays should be introduced..
 //whole module is asynchronous(no clock needed)
