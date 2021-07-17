@@ -8,7 +8,7 @@ module cacheMemory(
     writedata,
     readdata,
     busywait,
-    mem_Read,mem_Write,mem_Address,mem_Writedata,mem_Readdata,mem_BusyWait,Inst_hit);    
+    mem_Read,mem_Write,mem_Address,mem_Writedata,mem_Readdata,mem_BusyWait,Inst_hit,funct3);    
 
 input               clock;
 input               reset;
@@ -28,55 +28,74 @@ input            Inst_hit;           //this signal is used to check wether there
                                      //in other words using this, I identify wether the instruction is correct for the respective PC.
                                     //since theres an asynchronous output to instruction cache, there may be incorrect instructions fetched
                                     //before the correct instruction come.so here before executing i check Inst_hit is asserted
+input [1:0]      funct3;           //!to check which type of store instr(byte,half,full,upper)
+
 
 /* Cache memory storage register files */
-reg[31:0] cache [0:7];
-reg[2:0] cacheTag [0:7];
+reg[127:0] cache [0:7];
+reg[24:0] cacheTag [0:7];
 reg cacheDirty [0:7];
 reg cacheValid [0:7];
 
-reg[1:0] Offset;
+reg[3:0] Offset;
 reg[2:0] Index;
-reg[2:0] Tag;
+reg[24:0] Tag;
 
 /* dividing address to respective tag index and offset Asynchronousyly */
 always@(address) begin
  if(Inst_hit)begin               //LAB6 PART3 UPDATE:- checking Inst_hit is asserted
      if(read || write)begin
      #1
-     Offset <= address[1:0];     //need to check 
-     Index <= address[4:2];
-     Tag <= address[7:5];
+     Offset <= address[3:0];     //need to check 
+     Index <= address[6:4];
+     Tag <= address[31:7];
      end
  end    
 end
 
 /*Asynchronous comparator to compare tag and AND gate to check valid bit is set */
-wire comparatorOut;
-wire hit,dirty;
-wire[2:0] comparatorTagIN;
-assign comparatorTagIN = cacheTag[Index];
-comparator  group2_comparator(Tag,comparatorTagIN,comparatorOut);
-ANDgate     group2_ANDgate(cacheValid[Index],comparatorOut,hit);
+// wire comparatorOut;
+// wire hit,dirty;
+// wire[2:0] comparatorTagIN;
+// assign comparatorTagIN = cacheTag[Index];
+// comparator  group2_comparator(Tag,comparatorTagIN,comparatorOut);
+// ANDgate     group2_ANDgate(cacheValid[Index],comparatorOut,hit);
+
+assign comparatorOut = (Tag == cacheTag[Index])? 1:0;     //compare tags to check wether theres an entry in the cache memory_array
+assign hit =  (comparatorOut && cacheValid[Index])? 1:0;  //resolve hit state when tag matches and entry is valid
 
 /*for future usage*/
 assign dirty = cacheDirty[Index];
 
 
 /*Asynchronous data extraction and assigning*/
-wire[7:0] dataExtractMuxOut;
-wire[31:0] data;
+// wire[31:0] dataExtractMuxOut;
+// wire[127:0] data;
+// assign data = cache[Index];
+// multiplexerType4   group2_dataExtractMux(data[7:0],data[15:8],data[23:16],data[31:24],dataExtractMuxOut,Offset);
+// wire readdata;
+// assign #1 readdata = dataExtractMuxOut;
+wire[31:0] dataExtract;
+wire[127:0] data;
 assign data = cache[Index];
-multiplexerType4   group2_dataExtractMux(data[7:0],data[15:8],data[23:16],data[31:24],dataExtractMuxOut,Offset);
+always @(*)
+begin
+    case(Offset[3:2])
+    2'b00: dataExtract = data[31:0];
+    2'b01: dataExtract = data[63:31];
+    2'b10: dataExtract = data[95:64];
+    2'b11: dataExtract = data[127:96];
+end
 wire readdata;
-assign #1 readdata = dataExtractMuxOut;
+assign #1 readdata = dataExtract;
+
 
 /*set busywait whenever a write or read signal received*/
 reg Busywait;                                        
 reg readaccess, writeaccess;
 always @(read, write)
 begin
-    if(Inst_hit)begin                            //LAB6 PART3 UPDATE:- checking Inst_hit is asserted
+    if(Inst_hit)begin                            //checking Inst_hit is asserted
     Busywait = (read || write)? 1 : 0;               
     readaccess = (read && !write)? 1 : 0;
     writeaccess = (!read && write)? 1 : 0;
