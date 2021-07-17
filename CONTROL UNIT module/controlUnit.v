@@ -124,229 +124,282 @@ module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
     assign specific_OP = {funct7_A,funct7_B,funct3,instr_type};      //concatenation
     always @(specific_OP) begin
         casex(specific_OP)
-            9'bxxxxx0000: begin                             //LUI
+            9'bxxxxx0000: begin                             //LUI//
                 AlUop         = 5'bxxxxx;
                 mux1_select = 1'bx;
-                mux2_select = 3'b100; //forward
+                mux2_select = 3'b011; //forward
                 mux3_select = 1'b0;
+                mux5_select = 1'bx;
             end
-            9'bxxxxx0001: begin                             //AUIPC
+            9'bxxxxx0001: begin                             //AUIPC//
                 AlUop         = 5'b00000;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b1;
+                mux2_select = 3'b011;
                 mux3_select = 1'b0;
+                mux5_select = 1'b0;
             end
-            9'bxxxxx0010: begin                             //JAL
+            9'bxxxxx0010: begin                             //JAL//
                 AlUop         = 5'b00000;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b1;
+                mux2_select = 3'b100;
                 mux3_select = 1'b0;
+                mux5_select = 1'b0;
             end
-            9'bxxxxx0011: begin                             //JALR
+            9'bxxxxx0011: begin                             //JALR//
                 AlUop         = 5'b00000;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'b100;
                 mux3_select = 1'b0;
+                mux5_select = 1'b0;
             end
-            9'bxx0000100: begin                           //B type instructions specific opcodes (BEQ)
+            9'bxx0000100: begin                           //B type instructions specific opcodes (BEQ) //
                 AlUop         = 5'b00000;
-                mux1_select = 1'bx;
+                mux1_select = 1'b0;
                 mux2_select = 3'b000;
-                mux3_select = 1'b0;
+                mux3_select = 1'bx;
+                mux5_select = 1'b1;
             end
-            9'bxx0010100: begin                          //BNE      
+            9'bxx0010100: begin                          //BNE //     
                 AlUop         = 5'b00000;
-                mux1_select = 1'bx;
+                mux1_select = 1'b0;
                 mux2_select = 3'b000;
-                mux3_select = 1'b0;
+                mux3_select = 1'bx;
+                mux5_select = 1'b1;
             end
-            9'bxx1000100: begin                         //BLT             
+            9'bxx1000100: begin                         //BLT//             
                 AlUop         = 5'b00000;
-                mux1_select = 1'bx;
+                mux1_select = 1'b0;
                 mux2_select = 3'b000;
-                mux3_select = 1'b0;
+                mux3_select = 1'bx;
+                mux5_select = 1'b1;
             end
-            9'bxx1010100: begin                         //BGE        
+            9'bxx1010100: begin                         //BGE//        
                 AlUop         = 5'b00000;
-                mux1_select = 1'bx;
+                mux1_select = 1'b0;
                 mux2_select = 3'b000;
-                mux3_select = 1'b0;
+                mux3_select = 1'bx;
+                mux5_select = 1'b1;
             end
-            9'bxx1100100: begin                        //BLTU   
+            9'bxx1100100: begin                        //BLTU//   
                 AlUop         = 5'b00000;
-                mux1_select = 1'bx;
+                mux1_select = 1'b0;
                 mux2_select = 3'b000;
-                mux3_select = 1'b0;
+                mux3_select = 1'bx;
+                mux5_select = 1'b1;
             end
-            9'bxx1110100: begin                       //BGEU         
+            9'bxx1110100: begin                       //BGEU //        
                 AlUop         = 5'b00000;
-                mux1_select = 1'bx;
+                mux1_select = 1'b0;
                 mux2_select = 3'b000;
-                mux3_select = 1'b0;
+                mux3_select = 1'bx;
+                mux5_select = 1'b1;
             end
             //I type(Load) and store type specific opcodes have to be finalized
+
+            9'bxxxxx0101: begin                       //Load instructions//        
+                AlUop         = 5'b00000;
+                mux1_select = 1'b0;
+                mux2_select = 3'b001;
+                mux3_select = 1'bx;
+                mux5_select = 1'b1;
+            end
+
+            9'bxxxxx0110: begin                       //store instructions//        
+                AlUop         = 5'b00000;
+                mux1_select = 1'b0;
+                mux2_select = 3'b001;
+                mux3_select = 1'b1;
+                mux5_select = 1'b1;
+            end
             
-            9'bxx0000111: begin                          //I type instructions(ADDI)            
+            9'bxx0000111: begin                          //I type instructions(ADDI)//            
                 AlUop         = 5'b00000;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b1;
+                mux2_select = 3'b010;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'bxx0100111: begin                         //SLTI                         
+            9'bxx0100111: begin                         //SLTI            //             
                 AlUop         = 5'b10000;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b1;
+                mux2_select = 3'b010;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'bxx0110111: begin                        //SLTiU                                    
+            9'bxx0110111: begin                        //SLTiU        //                            
                 AlUop         = 5'b00001;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b1;
+                mux2_select = 3'b010;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'bxx1000111: begin                        //XORI                                 
+            9'bxx1000111: begin                        //XORI           //                      
                 AlUop         = 5'b00100;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b1;
+                mux2_select = 3'b010;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'bxx1100111: begin                       //ORI                         
+            9'bxx1100111: begin                       //ORI         //                
                 AlUop         = 5'b00011;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b1;
+                mux2_select = 3'b010;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'bxx1110111: begin                       //ANDI                                    
+            9'bxx1110111: begin                       //ANDI      //                              
                 AlUop         = 5'b00010;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b1;
+                mux2_select = 3'b010;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b000010111: begin                       //SLLI                                    
+            9'b000010111: begin                       //SLLI    //                                
                 AlUop         = 5'b00101;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b1;
+                mux2_select = 3'b010;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b001010111: begin                       //SRLI       
+            9'b001010111: begin                       //SRLI  //     
                 AlUop         = 5'b00110;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b1;
+                mux2_select = 3'b010;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b101010111: begin                       //SRAI       
+            9'b101010111: begin                       //SRAI//       
                 AlUop         = 5'b00111;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b1;
+                mux2_select = 3'b010;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b001011000: begin                       //R type(ADD)                 
+            9'b001011000: begin                       //R type(ADD)   //              
                 AlUop         = 5'b00000;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b101011000: begin                         //SUB 
+            9'b101011000: begin                         //SUB //
                 AlUop         = 5'b00001;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b001011000: begin                        //SLL                          
+            9'b001011000: begin                        //SLL //                         
                 AlUop         = 5'b00101;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b001011000: begin                         //SLT       
+            9'b001011000: begin                         //SLT //      
                 AlUop         = 5'b10000;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b001011000: begin                         //SLTU     
+            9'b001011000: begin                         //SLTU //    
                 AlUop         = 5'b10001;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b001011000: begin                        //XOR    
+            9'b001011000: begin                        //XOR //   
                 AlUop         = 5'b00100;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b001011000: begin                        //SRL       
+            9'b001011000: begin                        //SRL //      
                 AlUop         = 5'b00110;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b101011000: begin                         //SRA       
+            9'b101011000: begin                         //SRA //      
                 AlUop         = 5'b00111;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b001011000: begin                         //OR     
+            9'b001011000: begin                         //OR  //   
                 AlUop         = 5'b00011;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b001011000: begin                         //AND           
+            9'b001011000: begin                         //AND //          
                 AlUop         = 5'b00010;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b011011000: begin                //M extention instructions (MUL)                         
+            9'b011011000: begin                //M extention instructions (MUL)    //                     
                 AlUop         = 5'b01000;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b011011000: begin               //MULH                                
+            9'b011011000: begin               //MULH //                               
                 AlUop         = 5'b01001;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
             9'b011011000: begin                                    
-                AlUop         = 5'b01010;     //MULHSU
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                AlUop         = 5'b01010;     //MULHSU//
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b011011000: begin               //MULHU                         
+            9'b011011000: begin               //MULHU  //                       
                 AlUop         = 5'b01011;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b011011000: begin               //DIV                     
+            9'b011011000: begin               //DIV  //                   
                 AlUop         = 5'b01100;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b011011000: begin                //DIVU                    
+            9'b011011000: begin                //DIVU //                   
                 AlUop         = 5'b01101;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b011011000: begin               //REM                               
+            9'b011011000: begin               //REM //                              
                 AlUop         = 5'b01110;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
-            9'b011011000: begin              //REMU                           
+            9'b011011000: begin              //REMU  //                         
                 AlUop         = 5'b01111;
-                mux1_select = 1'bx;
-                mux2_select = 3'b000;
+                mux1_select = 1'b0;
+                mux2_select = 3'bxxx;
                 mux3_select = 1'b0;
+                mux5_select = 1'b1;
             end
         endcase       
     end
