@@ -15,19 +15,21 @@ input               reset;
 input               read;
 input               write;
 input[31:0]          address;            //TODO: should be 32 bit
-input[31:0]         writedata;           //TODO: should be 32 bit
-output[31:0]         readdata;           //TODO: should be 32 bit
+input[7:0]        writedata;           //TODO: should be 8 bit
+output[7:0]       readdata;           //TODO: should be 8 bit
 output           busywait;
 
 output           mem_Read,mem_Write;
-output[31:0]     mem_Writedata;      //TODO: should be 32 bit
-output[5:0]      mem_Address;
-input [31:0]     mem_Readdata;       //TODO: should be 32 bit
+output[7:0]     mem_Writedata;      //TODO: should be 8 bit
+output[31:0]      mem_Address;
+input [7:0]     mem_Readdata;       //TODO: should be 8 bit
 input            mem_BusyWait; 
 input            Inst_hit;           //this signal is used to check wether theres a hit in instruction cache.
                                      //in other words using this, I identify wether the instruction is correct for the respective PC.
                                     //since theres an asynchronous output to instruction cache, there may be incorrect instructions fetched
                                     //before the correct instruction come.so here before executing i check Inst_hit is asserted
+
+
 input [1:0]      funct3;           //!to check which type of store instr(byte,half,full,upper)
 
 
@@ -40,6 +42,7 @@ reg cacheValid [0:7];
 reg[3:0] Offset;
 reg[2:0] Index;
 reg[24:0] Tag;
+
 
 /* dividing address to respective tag index and offset Asynchronousyly */
 always@(address) begin
@@ -61,6 +64,8 @@ end
 // comparator  group2_comparator(Tag,comparatorTagIN,comparatorOut);
 // ANDgate     group2_ANDgate(cacheValid[Index],comparatorOut,hit);
 
+wire comparatorOut;
+wire hit,dirty;
 assign comparatorOut = (Tag == cacheTag[Index])? 1:0;     //compare tags to check wether theres an entry in the cache memory_array
 assign hit =  (comparatorOut && cacheValid[Index])? 1:0;  //resolve hit state when tag matches and entry is valid
 
@@ -80,9 +85,9 @@ wire[127:0] data;
 assign data = cache[Index];
 always @(*)
 begin
-    case(Offset[3:2])
+    case(Offset[3:2])        //!only last 2 bits are checked when reading data. because always readdata should be 32 bit block
     2'b00: dataExtract = data[31:0];
-    2'b01: dataExtract = data[63:31];
+    2'b01: dataExtract = data[63:32];
     2'b10: dataExtract = data[95:64];
     2'b11: dataExtract = data[127:96];
 end
@@ -115,16 +120,17 @@ always@(posedge clock)begin
     #1   
     cacheDirty[Index] = 1'b1;            //setting dirty bit to 1,this is the only place where dirty bit is set to 1                                //here cache write undergo even after busywait set to zero  
 
-    case(Offset)                         //then set the input data into correct place in the cache block
+    case(Offset[3:2])                         //then set the input data into correct place in the cache block
     2'b11:
-        cache[Index][31:24] = writedata;   //TODO: should be 32 bit
+        cache[Index][127:96] = writedata;   //TODO: should be 32 bit
     2'b10:
-        cache[Index][23:16] = writedata;   //TODO: should be 32 bit
+        cache[Index][95:64] = writedata;   //TODO: should be 32 bit
     2'b01:
-        cache[Index][15:8] = writedata;    //TODO: should be 32 bit
+        cache[Index][63:32] = writedata;    //TODO: should be 32 bit
     2'b00: 
-        cache[Index][7:0] = writedata;     //TODO: should be 32 bit
-    endcase 
+        cache[Index][31:0] = writedata;     //TODO: should be 32 bit
+    endcase
+
     end	
 end
 
@@ -167,7 +173,7 @@ integer i;
 //Reset Cache memory
 always @(posedge reset)
 begin
-    if (reset)
+    if (reset),
     begin
         for (i=0;i<8; i=i+1)
             begin
