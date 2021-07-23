@@ -8,7 +8,7 @@ module cacheMemory(
     writedata,
     readdata,
     busywait,
-    mem_Read,mem_Write,mem_Address,mem_Writedata,mem_Readdata,mem_BusyWait,Inst_hit,funct3);    
+    mem_Read,mem_Write,mem_Address,mem_Writedata,mem_Readdata,mem_BusyWait,Inst_hit);    
 
 input               clock;
 input               reset;
@@ -20,9 +20,9 @@ output[7:0]       readdata;
 output           busywait;
 
 output           mem_Read,mem_Write;
-output[7:0]     mem_Writedata;      
-output[31:0]      mem_Address;
-input [7:0]     mem_Readdata;       
+output[127:0]     mem_Writedata;      
+output[27:0]      mem_Address;
+input [127:0]     mem_Readdata;       
 input            mem_BusyWait; 
 input            Inst_hit;           //this signal is used to check wether theres a hit in instruction cache.
                                      //in other words using this, I identify wether the instruction is correct for the respective PC.
@@ -78,7 +78,7 @@ assign dirty = cacheDirty[Index];
 // multiplexerType4   group2_dataExtractMux(data[7:0],data[15:8],data[23:16],data[31:24],dataExtractMuxOut,Offset);
 // wire readdata;
 // assign #1 readdata = dataExtractMuxOut;
-wire[7:0] dataExtract;
+reg[7:0] dataExtract;      //!check this
 wire[127:0] data;
 assign data = cache[Index];
 always @(*)
@@ -100,6 +100,7 @@ begin
     4'b1101: dataExtract = data[111:104];
     4'b1110: dataExtract = data[119:112];
     4'b1111: dataExtract = data[127:120];
+    endcase
 end
 wire readdata;
 assign #1 readdata = dataExtract;
@@ -181,7 +182,7 @@ end
 
 /* cache controller to handle data memory control signals(mem_Read,mem_Write etc) whenever a miss occured in cachememory */
 wire controllerBusywait;                                  
-cacheController    e16203_cacheController(clock,reset,read,write,address,writedata,controllerBusywait,mem_BusyWait,Tag1,writedata1,Tag,Index,hit,dirty,mem_Read,mem_Write,mem_Writedata,mem_Address);
+cacheController    e16203_cacheController(clock,reset,read,write,controllerBusywait,mem_BusyWait,Tag1,writedata1,Tag,Index,hit,dirty,mem_Read,mem_Write,mem_Writedata,mem_Address);
 
 /* overall busywait is set to zero whenever cachecontroller busywait and cachememory busywait both set to zero */
 wire busywait;                                           
@@ -191,9 +192,9 @@ integer i;
 //Reset Cache memory
 always @(posedge reset)
 begin
-    if (reset),
+    if (reset)
     begin
-        for (i=0;i<8; i=i+1)
+        for (i=0;i<8;i=i+1)
             begin
             cache[i] = 0;
             cacheTag[i] = 0;
@@ -205,6 +206,7 @@ begin
         Busywait = 0;
     end
 end
+
 endmodule
 
 
