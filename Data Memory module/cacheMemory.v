@@ -14,23 +14,21 @@ input               clock;
 input               reset;
 input               read;
 input               write;
-input[31:0]          address;            //TODO: should be 32 bit
-input[7:0]        writedata;           //TODO: should be 8 bit
-output[7:0]       readdata;           //TODO: should be 8 bit
+input[31:0]          address;            
+input[7:0]        writedata;           
+output[7:0]       readdata;           
 output           busywait;
 
 output           mem_Read,mem_Write;
-output[7:0]     mem_Writedata;      //TODO: should be 8 bit
+output[7:0]     mem_Writedata;      
 output[31:0]      mem_Address;
-input [7:0]     mem_Readdata;       //TODO: should be 8 bit
+input [7:0]     mem_Readdata;       
 input            mem_BusyWait; 
 input            Inst_hit;           //this signal is used to check wether theres a hit in instruction cache.
                                      //in other words using this, I identify wether the instruction is correct for the respective PC.
                                     //since theres an asynchronous output to instruction cache, there may be incorrect instructions fetched
                                     //before the correct instruction come.so here before executing i check Inst_hit is asserted
 
-
-input [1:0]      funct3;           //!to check which type of store instr(byte,half,full,upper)
 
 
 /* Cache memory storage register files */
@@ -80,16 +78,28 @@ assign dirty = cacheDirty[Index];
 // multiplexerType4   group2_dataExtractMux(data[7:0],data[15:8],data[23:16],data[31:24],dataExtractMuxOut,Offset);
 // wire readdata;
 // assign #1 readdata = dataExtractMuxOut;
-wire[31:0] dataExtract;
+wire[7:0] dataExtract;
 wire[127:0] data;
 assign data = cache[Index];
 always @(*)
 begin
-    case(Offset[3:2])        //!only last 2 bits are checked when reading data. because always readdata should be 32 bit block
-    2'b00: dataExtract = data[31:0];
-    2'b01: dataExtract = data[63:32];
-    2'b10: dataExtract = data[95:64];
-    2'b11: dataExtract = data[127:96];
+    case(Offset)        //!relevent 8 bits are selected
+    4'b0000: dataExtract = data[7:0] ;
+    4'b0001: dataExtract = data[15:8] ;
+    4'b0010: dataExtract = data[23:16] ;
+    4'b0011: dataExtract = data[31:24] ;
+    4'b0100: dataExtract = data[39:32] ;
+    4'b0101: dataExtract = data[47:40] ;
+    4'b0110: dataExtract = data[55:48] ;
+    4'b0111: dataExtract = data[63:56] ;
+    4'b1000: dataExtract = data[71:64] ;
+    4'b1001: dataExtract = data[79:72] ;
+    4'b1010: dataExtract = data[87:80] ;
+    4'b1011: dataExtract = data[95:88] ;
+    4'b1100: dataExtract = data[103:96] ;
+    4'b1101: dataExtract = data[111:104];
+    4'b1110: dataExtract = data[119:112];
+    4'b1111: dataExtract = data[127:120];
 end
 wire readdata;
 assign #1 readdata = dataExtract;
@@ -120,15 +130,23 @@ always@(posedge clock)begin
     #1   
     cacheDirty[Index] = 1'b1;            //setting dirty bit to 1,this is the only place where dirty bit is set to 1                                //here cache write undergo even after busywait set to zero  
 
-    case(Offset[3:2])                         //then set the input data into correct place in the cache block
-    2'b11:
-        cache[Index][127:96] = writedata;   //TODO: should be 32 bit
-    2'b10:
-        cache[Index][95:64] = writedata;   //TODO: should be 32 bit
-    2'b01:
-        cache[Index][63:32] = writedata;    //TODO: should be 32 bit
-    2'b00: 
-        cache[Index][31:0] = writedata;     //TODO: should be 32 bit
+    case(Offset)                         //then set the input data into correct place in the cache block  
+    4'b0000: cache[Index][7:0] = writedata;
+    4'b0001: cache[Index][15:8] = writedata;
+    4'b0010: cache[Index][23:16] = writedata;
+    4'b0011: cache[Index][31:24] = writedata;
+    4'b0100: cache[Index][39:32] = writedata;
+    4'b0101: cache[Index][47:40] = writedata;
+    4'b0110: cache[Index][55:48] = writedata;
+    4'b0111: cache[Index][63:56] = writedata;
+    4'b1000: cache[Index][71:64] = writedata;
+    4'b1001: cache[Index][79:72] = writedata;
+    4'b1010: cache[Index][87:80] = writedata;
+    4'b1011: cache[Index][95:88] = writedata;
+    4'b1100: cache[Index][103:96] = writedata;
+    4'b1101: cache[Index][111:104] = writedata;
+    4'b1110: cache[Index][119:112] = writedata;
+    4'b1111: cache[Index][127:120] = writedata;       
     endcase
 
     end	
@@ -150,8 +168,8 @@ end
 
 /* here i provide the block tag and the data to be written to the data memory when there was a miss occured and 
    the block is dirty (to complete WRITE_BACK state) */
-reg[31:0] writedata1;   //these are inputs to my cache controller
-reg[2:0] Tag1;          //these are inputs to my cache controller
+reg[127:0] writedata1;   //these are inputs to my cache controller
+reg[24:0] Tag1;          //these are inputs to my cache controller
 always@(hit)begin
 	if(!hit && dirty)
        begin
