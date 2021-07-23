@@ -1,4 +1,4 @@
-//       #########         Data refining        ########
+//       #########         Data output refining        ########
 
 //Delays should be introduced..
 //whole module is asynchronous(no clock needed)
