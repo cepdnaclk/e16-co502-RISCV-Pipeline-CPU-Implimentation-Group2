@@ -1,2 +1,7 @@
 1). in store word instructions when store bytes or half words 
 how the rest of the bits should be filled. don't care or 0.
+
+2). when should pipeline registers updated? within the end of the current cock cycle or
+    the posedge of the next clock cycle.
+    if pipeline registers are configured to posedge of clock cycle there should be time delay after that the other modules 
+    should work. 

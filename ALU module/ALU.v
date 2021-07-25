@@ -15,7 +15,7 @@ module alu(DATA1,DATA2,RESULT,SELECT,zero_signal,sign_bit_signal,sltu_bit_signal
 			   SLT,SLTU;                                       
     reg[31:0] RESULT;													 //(output is declared as type reg since it is used in procedural block)
 	
-	assign zero_signal=;
+	assign zero_signal= ~(|RESULT);                                      //zero flag set when data 1 and data 2 is equal
 	assign sign_bit_signal=RESULT[31];
 	assign sltu_bit_signal=SLTU[0];
 

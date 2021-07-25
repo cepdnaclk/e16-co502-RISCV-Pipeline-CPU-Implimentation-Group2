@@ -2,12 +2,12 @@
 
 //Delays should be introduced..
 
-module reg_file(IN,OUT1,OUT2,INADDRESS,OUT1ADDRESS,OUT2ADDRESS,WRITE,CLK,RESET);
+module reg_file(IN,OUT1,OUT2,INADDRESS,OUT1ADDRESS,OUT2ADDRESS,WRITE,CLK,RESET,InstHIT);
 
 	input [4:0] OUT1ADDRESS,OUT2ADDRESS,INADDRESS;    //5 bit addresses
 	input [31:0] IN;
 	input CLK,RESET;
-	input WRITE;                                    //write_enable signal
+	input WRITE,InstHIT;                             //write_enable signal & instruction valid
 	output wire [31:0] OUT1,OUT2;
 	integer n;                                      //variable for iterations
 	reg [31:0] regFile [0:31];	                    //regfile 32 registers with 32 bits
@@ -16,7 +16,7 @@ module reg_file(IN,OUT1,OUT2,INADDRESS,OUT1ADDRESS,OUT2ADDRESS,WRITE,CLK,RESET);
 	assign #2 OUT2 = regFile[OUT2ADDRESS];
 
 	always @(posedge CLK) begin 	                //writing to the register file
-	    if(WRITE == 1'b1 && RESET != 1'b1 )begin
+	    if(WRITE == 1'b1 && RESET != 1'b1 && InstHIT == 1'b1)begin    // if write enable and no reset and the instruction is valid
         #2                                         //reading delay
 		regFile[INADDRESS] = IN;                    //Writing to the corresponding register
 		end

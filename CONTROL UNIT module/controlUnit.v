@@ -153,42 +153,42 @@ module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
                 mux5_select = 1'b0;
             end
             9'bxx0000100: begin                           //B type instructions specific opcodes (BEQ) //
-                AlUop         = 5'b00000;
+                AlUop         = 5'b00001;
                 mux1_select = 1'b0;
                 mux2_select = 3'b000;
                 mux3_select = 1'bx;
                 mux5_select = 1'b1;
             end
             9'bxx0010100: begin                          //BNE //     
-                AlUop         = 5'b00000;
+                AlUop         = 5'b00001;
                 mux1_select = 1'b0;
                 mux2_select = 3'b000;
                 mux3_select = 1'bx;
                 mux5_select = 1'b1;
             end
             9'bxx1000100: begin                         //BLT//             
-                AlUop         = 5'b00000;
+                AlUop         = 5'b00001;
                 mux1_select = 1'b0;
                 mux2_select = 3'b000;
                 mux3_select = 1'bx;
                 mux5_select = 1'b1;
             end
             9'bxx1010100: begin                         //BGE//        
-                AlUop         = 5'b00000;
+                AlUop         = 5'b00001;
                 mux1_select = 1'b0;
                 mux2_select = 3'b000;
                 mux3_select = 1'bx;
                 mux5_select = 1'b1;
             end
             9'bxx1100100: begin                        //BLTU//   
-                AlUop         = 5'b00000;
+                AlUop         = 5'b00001;
                 mux1_select = 1'b0;
                 mux2_select = 3'b000;
                 mux3_select = 1'bx;
                 mux5_select = 1'b1;
             end
             9'bxx1110100: begin                       //BGEU //        
-                AlUop         = 5'b00000;
+                AlUop         = 5'b00001;
                 mux1_select = 1'b0;
                 mux2_select = 3'b000;
                 mux3_select = 1'bx;

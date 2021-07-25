@@ -4,22 +4,20 @@ module cacheController(
     reset,
     read,
     write,
-    address,
-    writedata,
     busywait,
     mem_Busywait,
     Tag1,writedata1,Tag,Index,hit,dirty,mem_Read,mem_Write,mem_Writedata,mem_Address);
 
-    input[7:0] address,writedata;
-    input[31:0] writedata1;
-    input[2:0] Tag1,Tag,Index;
+    input[127:0] writedata1;
+    input[24:0] Tag1,Tag;
+    input[2:0] Index;
     input mem_Busywait,read,write,clock,reset,hit,dirty;
     
     output busywait,mem_Read,mem_Write;
-    output[31:0] mem_Writedata;
-    output[5:0] mem_Address;
-    reg [31:0] mem_Writedata;
-    reg[5:0] mem_Address;
+    output [127:0] mem_Writedata;
+    output[27:0] mem_Address;
+    reg [127:0] mem_Writedata;
+    reg[27:0] mem_Address;
     reg mem_Read,mem_Write,busywait;
 
 
@@ -28,7 +26,7 @@ module cacheController(
     /*    here i used three states
           cache controller is used to set data memory control signals whenever a miss
               occured in cache memory
-          please find the attached state diagrame for better understanding    */     
+          please find the attached state diagrame in report for better understanding    */     
 
 
     parameter IDLE = 2'b00, MEM_READ = 2'b01, WRITE_BACK = 2'b10; 
@@ -83,7 +81,7 @@ module cacheController(
             begin
                 mem_Read = 0;
                 mem_Write = 0;
-                mem_Address = 6'dx;
+                mem_Address = 28'dx;
                 mem_Writedata = 32'dx;
                 busywait = 0;
             end
