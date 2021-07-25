@@ -19,7 +19,7 @@ or(busywait,instruction_mem_busywait,data_mem_busywait);
 
 
 always @(RESET) begin //set the pc value depend on the RESET to start the programme
-    PC=-4;
+    PC= -4;
 end
 
 // incrementing PC by 4 to get next PC value
