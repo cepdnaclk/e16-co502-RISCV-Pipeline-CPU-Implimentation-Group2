@@ -1,0 +1,26 @@
+{
+    "title": "RISC V Pipeline CPU",
+    "team": [
+    {
+        "name": "Isur Lakshan",
+        "email": "eng.isurulakshan@gmail.com ",
+        "eNumber": "E/16/203"
+    },
+    {
+        "name": "Randika Viraj",
+        "email": "e16332@eng.pdn.ac.lk ",
+        "eNumber": "E/16/332"
+    }
+    ],
+    "supervisors": [
+    {
+        "name": "Dr. Isuru Navinna",
+        "email": "isurunawinne@eng.pdn.ac.lk "
+    },
+    {
+        "name": "Dr. Mahanama wickramasinghe",
+        "email": "mahanamaw@eng.pdn.ac.lk "
+    }
+    ],
+    "tags": ["RISC V", "Computer Architecture","Verilog"]
+}
