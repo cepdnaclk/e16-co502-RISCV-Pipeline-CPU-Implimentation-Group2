@@ -12,17 +12,17 @@ output reg Insthit_out;
 
 always @(posedge clock ) begin
     if (!busywait)begin
-        nextPC_out = nextPC;
-        PC_out     = PC;
-        Instr_out  = Instruction;
-        Insthit_out = Insthit;
+        nextPC_out  <= nextPC;
+        PC_out      <= PC;
+        Instr_out   <= Instruction;
+        Insthit_out <= Insthit;
     end
 end
 
 always @(reset)begin
     if(reset == 1'b1) begin 
-        Instr_out = 0;
-        Insthit_out = 0;
+        Instr_out   <= 0;
+        Insthit_out <= 0;
     end
 end
 
@@ -70,24 +70,24 @@ output reg        mux_5_sel_out,writeEnable_out,mux_3_sel_out,memWrite_out,memRe
 
 always @(posedge clock ) begin
     if (!busywait)begin
-        nextPC_out = nextPC;
-        PC_out     = PC;
-        data1_out  = data1;
-        data2_out  = data2;
-        ALUop_out  = ALUop;
-        des_register_out    = des_register;
-        mux_2_out_out       = mux_2_out;
-        Funct3_out          = Funct3;
-        mux_4_sel_out       = mux_4_sel;
-        mux_5_sel_out       = mux_5_sel;
-        writeEnable_out     = writeEnable;
-        mux_3_sel_out       = mux_3_sel;
-        memWrite_out        = memWrite;
-        memRead_out         = memRead;
-        branch_out          = branch;
-        jump_out            = jump;
-        mux_1_sel_out       = mux_1_sel;
-        Insthit_out         = Insthit;
+        nextPC_out <= nextPC;
+        PC_out     <= PC;
+        data1_out  <= data1;
+        data2_out  <= data2;
+        ALUop_out  <= ALUop;
+        des_register_out    <= des_register;
+        mux_2_out_out       <= mux_2_out;
+        Funct3_out          <= Funct3;
+        mux_4_sel_out       <= mux_4_sel;
+        mux_5_sel_out       <= mux_5_sel;
+        writeEnable_out     <= writeEnable;
+        mux_3_sel_out       <= mux_3_sel;
+        memWrite_out        <= memWrite;
+        memRead_out         <= memRead;
+        branch_out          <= branch;
+        jump_out            <= jump;
+        mux_1_sel_out       <= mux_1_sel;
+        Insthit_out         <= Insthit;
     end
 end
 
@@ -134,15 +134,15 @@ output reg        writeEnable_out,mux_3_sel_out,memWrite_out,memRead_out,Insthit
 
 always @(posedge clock ) begin
     if (!busywait)begin
-        data2_out  = data2;
-        ALUout_out  = ALUout;
-        des_register_out    = des_register;
-        Funct3_out          = Funct3;
-        writeEnable_out     = writeEnable;
-        mux_3_sel_out       = mux_3_sel;
-        memWrite_out        = memWrite;
-        memRead_out         = memRead;
-        Insthit_out         = Insthit;
+        data2_out           <= data2;
+        ALUout_out          <= ALUout;
+        des_register_out    <= des_register;
+        Funct3_out          <= Funct3;
+        writeEnable_out     <= writeEnable;
+        mux_3_sel_out       <= mux_3_sel;
+        memWrite_out        <= memWrite;
+        memRead_out         <= memRead;
+        Insthit_out         <= Insthit;
     end
 end
 
@@ -184,12 +184,12 @@ output reg [4:0]  des_register_out;
 output reg        writeEnable_out,mux_3_sel_out,Insthit_out;
 
 always @(posedge clock ) begin
-        dmem_out_out  = dmem_out;
-        ALUout_out  = ALUout;
-        des_register_out    = des_register;
-        writeEnable_out     = writeEnable;
-        mux_3_sel_out       = mux_3_sel;
-        Insthit_out         = Insthit;
+        dmem_out_out        <= dmem_out;
+        ALUout_out          <= ALUout;
+        des_register_out    <= des_register;
+        writeEnable_out     <= writeEnable;
+        mux_3_sel_out       <= mux_3_sel;
+        Insthit_out         <= Insthit;
 end
 
 //what should happen when reset????
