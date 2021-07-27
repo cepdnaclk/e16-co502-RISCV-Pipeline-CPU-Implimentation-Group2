@@ -3,12 +3,11 @@
 //Delays should be introduced..
 //compatible with the new datapath.. updated 6/7/2021
 
-module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,memRead,memWrite,branch,jump,writeEnable,AlUop);          //control unit module
+module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,mux5_select,memRead,memWrite,branch,jump,writeEnable,AlUop);          //control unit module
 	
     //port declaration
     input  [31:0] Instruction;
     output [4:0] AlUop;
-    output branch,Jump;
     output [1:0] mux4_select;
     output [2:0] mux2_select;
 	output mux1_select,mux3_select,
@@ -17,11 +16,10 @@ module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
 	reg [6:0] OPCODE;
     reg [2:0] funct3;
     reg funct7_A,funct7_B;
-    reg [1:0] mux3_select;                                //mux at the end of the pipeline which differentiate aluOut,data mem out and pc+4 value for JAL instructions
-    reg mux1_select,mux2_select,mux4_select,
+    reg [1:0] mux4_select;                                //mux at the end of the pipeline which differentiate aluOut,data mem out and pc+4 value for JAL instructions
+    reg mux1_select,mux2_select,mux3_select,
             mux5_select,memRead,memWrite,branch,jump,writeEnable;
     wire [8:0] specific_OP;
-    reg  [2:0] branch_Jump;
     reg  [2:0] Immidiate;
     reg  [3:0] instr_type;
     reg  [4:0] AlUop;
