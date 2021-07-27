@@ -1,4 +1,4 @@
-module programeCounter(RESET,CLK,nextPC,PC,busyWait);
+module programeCounter(CLK,RESET,nextPC,PC,busyWait);
 input CLK,RESET,busyWait;
 input [31:0] nextPC;
 output [31:0] PC;
