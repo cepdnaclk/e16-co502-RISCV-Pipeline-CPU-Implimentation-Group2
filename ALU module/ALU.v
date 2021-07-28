@@ -23,31 +23,31 @@ module alu(DATA1,DATA2,RESULT,SELECT,zero_signal,sign_bit_signal,sltu_bit_signal
 	// assign FORWARD=DATA2;                                  //forward DATA2 to output
 
     //R type instructions
-    assign ADD=DATA1 + DATA2;                             //Addition
-	assign SUB=DATA1 - DATA2;                             //Substraction
-    assign AND=DATA1 & DATA2;                             //bitwise AND
-    assign OR=DATA1 | DATA2;                              //bitwise OR
-    assign XOR=DATA1 ^ DATA2;                             //bitwise XOR
+    assign #2 ADD=DATA1 + DATA2;                             //Addition
+	assign #2 SUB=DATA1 - DATA2;                             //Substraction
+    assign #1 AND=DATA1 & DATA2;                             //bitwise AND
+    assign #1 OR=DATA1 | DATA2;                              //bitwise OR
+    assign #1 XOR=DATA1 ^ DATA2;                             //bitwise XOR
 
 	//shift operations
-    assign SLL = DATA1 << DATA2;                          //shift left logical
-    assign SRL = DATA1 >> DATA2;						  //shift right logical
-    assign SRA = DATA1 >>> DATA2;						  //shift roght arithmetic
+    assign #1 SLL = DATA1 << DATA2;                          //shift left logical
+    assign #1 SRL = DATA1 >> DATA2;						  //shift right logical
+    assign #1 SRA = DATA1 >>> DATA2;						  //shift roght arithmetic
 
 	//multiplication and division instructions
-	assign MUL = DATA1 * DATA2;                            // Multiplication
-    assign MULH = DATA1 * DATA2;                           // Multiplication (Signed)
-    assign MULHU = $unsigned(DATA1) * $unsigned(DATA2);    // Multiplication (Unsigned)
-    assign MULHSU = $signed(DATA1) * $unsigned(DATA2);     // Multiplication (Signed x UnSigned)
+	assign #4 MUL = DATA1 * DATA2;                            // Multiplication
+    assign #4 MULH = DATA1 * DATA2;                           // Multiplication (Signed)
+    assign #4 MULHU = $unsigned(DATA1) * $unsigned(DATA2);    // Multiplication (Unsigned)
+    assign #4 MULHSU = $signed(DATA1) * $unsigned(DATA2);     // Multiplication (Signed x UnSigned)
 
-	assign DIV = DATA1 / DATA2;                           // Division
-    assign DIVU = $unsigned(DATA1) / $unsigned(DATA2);    // Division Unsigned
-    assign REM = DATA1 % DATA2;                           // Remainder
-    assign REMU = DATA1 % DATA2;                          // Remainder Unsigned
+	assign #4 DIV = DATA1 / DATA2;                           // Division
+    assign #4 DIVU = $unsigned(DATA1) / $unsigned(DATA2);    // Division Unsigned
+    assign #4 REM = DATA1 % DATA2;                           // Remainder
+    assign #4 REMU = DATA1 % DATA2;                          // Remainder Unsigned
 
 
-	assign SLT = ($signed(DATA1) < $signed(DATA2)) ? 32'd1 : 32'd0;         // set less than (signed)
-    assign SLTU = ($unsigned(DATA1) < $unsigned(DATA2)) ? 32'd1 : 32'd0;    // set less than (unsigned)
+	assign #1 SLT = ($signed(DATA1) < $signed(DATA2)) ? 32'd1 : 32'd0;         // set less than (signed)
+    assign #1 SLTU = ($unsigned(DATA1) < $unsigned(DATA2)) ? 32'd1 : 32'd0;    // set less than (unsigned)
 
 	always@(*)                          //always block calls whenever a signal changes
 	begin
