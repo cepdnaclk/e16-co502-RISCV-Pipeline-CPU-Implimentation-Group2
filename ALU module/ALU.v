@@ -15,9 +15,9 @@ module alu(DATA1,DATA2,RESULT,SELECT,zero_signal,sign_bit_signal,sltu_bit_signal
 			   SLT,SLTU;                                       
     reg[31:0] RESULT;													 //(output is declared as type reg since it is used in procedural block)
 	
-	assign zero_signal= ~(|RESULT);                                      //zero flag set when data 1 and data 2 is equal
-	assign sign_bit_signal=RESULT[31];
-	assign sltu_bit_signal=SLTU[0];
+	assign zero_signal= ~(|RESULT);                                      //zero flag set when data 1 and data 2 is equal(Z flag)
+	assign sign_bit_signal=RESULT[31];                                   //sign bit  (G flag)
+	assign sltu_bit_signal=SLTU[0];										// zeroth bit of sltu operation (K flag)
 
 	//forwarding removed
 	// assign FORWARD=DATA2;                                  //forward DATA2 to output
@@ -35,15 +35,15 @@ module alu(DATA1,DATA2,RESULT,SELECT,zero_signal,sign_bit_signal,sltu_bit_signal
     assign #1 SRA = DATA1 >>> DATA2;						  //shift roght arithmetic
 
 	//multiplication and division instructions
-	assign #4 MUL = DATA1 * DATA2;                            // Multiplication
-    assign #4 MULH = DATA1 * DATA2;                           // Multiplication (Signed)
-    assign #4 MULHU = $unsigned(DATA1) * $unsigned(DATA2);    // Multiplication (Unsigned)
-    assign #4 MULHSU = $signed(DATA1) * $unsigned(DATA2);     // Multiplication (Signed x UnSigned)
+	assign #3 MUL = DATA1 * DATA2;                            // Multiplication
+    assign #3 MULH = DATA1 * DATA2;                           // Multiplication (Signed)
+    assign #3 MULHU = $unsigned(DATA1) * $unsigned(DATA2);    // Multiplication (Unsigned)
+    assign #3 MULHSU = $signed(DATA1) * $unsigned(DATA2);     // Multiplication (Signed x UnSigned)
 
-	assign #4 DIV = DATA1 / DATA2;                           // Division
-    assign #4 DIVU = $unsigned(DATA1) / $unsigned(DATA2);    // Division Unsigned
-    assign #4 REM = DATA1 % DATA2;                           // Remainder
-    assign #4 REMU = DATA1 % DATA2;                          // Remainder Unsigned
+	assign #3 DIV = DATA1 / DATA2;                           // Division
+    assign #3 DIVU = $unsigned(DATA1) / $unsigned(DATA2);    // Division Unsigned
+    assign #3 REM = DATA1 % DATA2;                           // Remainder
+    assign #3 REMU = DATA1 % DATA2;                          // Remainder Unsigned
 
 
 	assign #1 SLT = ($signed(DATA1) < $signed(DATA2)) ? 32'd1 : 32'd0;         // set less than (signed)
