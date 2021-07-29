@@ -1,6 +1,7 @@
 module Branch_jump_module (
     PC,
     Branch_imm,
+    Alu_Jump_imm,
     func_3,
     zero_signal,
     sign_bit_signal,
