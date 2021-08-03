@@ -119,8 +119,9 @@ endmodule
 	reg [31:0] DATA1,DATA2;
 	reg [4:0] SELECT;
 	wire [31:0] RESULT;
-
-	alu alu_test(DATA1,DATA2,RESULT,SELECT);	
+	wire zero_signal,sign_bit_signal,sltu_bit_signal;
+	 
+	 alu alu_test(DATA1,DATA2,RESULT,SELECT,zero_signal,sign_bit_signal,sltu_bit_signal);	
 		
 		initial
 		begin
