@@ -8,6 +8,8 @@ using namespace std;
 
 string getRegisterValue(string);
 string hexaToBinaryConverter(string ,int);
+string getRtypeinstruction(string ,string ,string ,string);
+string getItypeinstruction(string ,string ,string);
 
 
 
@@ -18,51 +20,127 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-string getRtypeinstype(string instype,string rs2,string rs1,string rd){
-    string instruction=getRegisterValue(rd)+"0110011";
-    if (instype.compare("ADD"))
+string getItypeinstruction(string instype,string rs1,string imm){
+
+    string instruction=getRegisterValue(rd)+"0010011";
+
+    if (instype.compare("ADDI"))
     {
-        instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"000"+instruction;
+        instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"000"+instruction;
     }
-    else if (instype.compare("AND"))
+    else if (instype.compare("ANDI"))
     {
-        instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"111"+instruction;
+        instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"111"+instruction;
     }
-    else if (instype.compare("OR"))
+    else if (instype.compare("ORI"))
     {
-       instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"110"+instruction;
+       instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"110"+instruction;
     }
-    else if (instype.compare("SLL"))
+    else if (instype.compare("SLLI"))
     {
-        instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"001"+instruction;
+        instruction="0000000"+hexaToBinaryConverter(imm,2).substr(3,5)+getRegisterValue(rs1)+"001"+instruction;
     }
-    else if (instype.compare("SLT"))
+    else if (instype.compare("SLTI"))
     {
-       instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"010"+instruction;
+       instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"010"+instruction;
     }
-    else if (instype.compare("SLTU"))
+    else if (instype.compare("SLTIU"))
     {
-       instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"011"+instruction;
+       instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"011"+instruction;
     }
-    else if (instype.compare("SRA"))
+    else if (instype.compare("SRAI"))
     {
-        instruction="0100000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"101"+instruction;
+        instruction="0100000"+hexaToBinaryConverter(imm,2).substr(3,5)+getRegisterValue(rs1)+"101"+instruction;
     }
-    else if (instype.compare("SRL"))
+    else if (instype.compare("SRLI"))
     {
-        instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"101"+instruction;
+        instruction="0000000"+hexaToBinaryConverter(imm,2).substr(3,5)+getRegisterValue(rs1)+"101"+instruction;
     }
-    else if (instype.compare("SUB"))
+    else if (instype.compare("XORI"))
     {
-        instruction="0100000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"000"+instruction;
+        instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"100"+instruction;
     }
-    else if (instype.compare("XOR"))
+    else if (instype.compare("LB"))
     {
-        instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"100"+instruction;
+       instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"000"+getRegisterValue(rd)+"0000011";
+    }
+    else if (instype.compare("LH"))
+    {
+       instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"001"+getRegisterValue(rd)+"0000011";
+    }
+    else if (instype.compare("LW"))
+    {
+       instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"010"+getRegisterValue(rd)+"0000011";
+    }
+    else if (instype.compare("LBU"))
+    {
+       instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"100"+getRegisterValue(rd)+"0000011";
+    }
+    else if (instype.compare("LHU"))
+    {
+       instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"101"+getRegisterValue(rd)+"0000011";
+    }
+    else if (instype.compare("JALR"))
+    {
+       instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"000"+getRegisterValue(rd)+"1100111";
+    }
+    else{
+        return NULL;
     }
     
     return instruction;
 }
+
+string getRtypeinstruction(string instype,string rs2,string rs1,string rd){
+    string instruction=getRegisterValue(rd)+"0110011";
+    if (instype.compare("ADD"))
+    {
+        instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"000"+instruction;
+    }
+    else if (instype.compare("AND"))
+    {
+        instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"111"+instruction;
+    }
+    else if (instype.compare("OR"))
+    {
+       instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"110"+instruction;
+    }
+    else if (instype.compare("SLL"))
+    {
+        instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"001"+instruction;
+    }
+    else if (instype.compare("SLT"))
+    {
+       instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"010"+instruction;
+    }
+    else if (instype.compare("SLTU"))
+    {
+       instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"011"+instruction;
+    }
+    else if (instype.compare("SRA"))
+    {
+        instruction="0100000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"101"+instruction;
+    }
+    else if (instype.compare("SRL"))
+    {
+        instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"101"+instruction;
+    }
+    else if (instype.compare("SUB"))
+    {
+        instruction="0100000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"000"+instruction;
+    }
+    else if (instype.compare("XOR"))
+    {
+        instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"100"+instruction;
+    }
+    else{
+        return NULL;
+    }
+    
+    return instruction;
+}
+
+
 
 string getRegisterValue(string reg){
     for (unsigned char i = 0; i < 32; i++)
