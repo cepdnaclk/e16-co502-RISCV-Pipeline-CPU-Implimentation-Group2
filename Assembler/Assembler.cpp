@@ -9,7 +9,8 @@ using namespace std;
 string getRegisterValue(string);
 string hexaToBinaryConverter(string ,int);
 string getRtypeinstruction(string ,string ,string ,string);
-string getItypeinstruction(string ,string ,string);
+string getItypeinstruction(string ,string ,string,string);
+string getStypeinstruction(string ,string ,string ,string);
 
 
 
@@ -20,67 +21,92 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-string getItypeinstruction(string instype,string rs1,string imm){
+string getStypeinstruction(string instype,string rs2,string rs1,string imm){
+
+    string binary_imm=hexaToBinaryConverter(imm,3);
+    string instruction=binary_imm.substr(7,5)+"0100011";     
+
+    if (!instype.compare("SB"))
+    {
+        instruction=binary_imm.substr(0,7)+getRegisterValue(rs2)+getRegisterValue(rs1)+"000"+instruction;
+    }
+    else if (!instype.compare("SH"))
+    {
+        instruction=binary_imm.substr(0,7)+getRegisterValue(rs2)+getRegisterValue(rs1)+"001"+instruction;
+    }
+    else if (!instype.compare("SW"))
+    {
+        instruction=binary_imm.substr(0,7)+getRegisterValue(rs2)+getRegisterValue(rs1)+"010"+instruction;
+    }
+    else
+    {
+        return NULL;
+    }
+
+    return instruction;
+}
+
+string getItypeinstruction(string instype,string rs1,string imm,string rd){
 
     string instruction=getRegisterValue(rd)+"0010011";
 
-    if (instype.compare("ADDI"))
+    if (!instype.compare("ADDI"))
     {
         instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"000"+instruction;
     }
-    else if (instype.compare("ANDI"))
+    else if (!instype.compare("ANDI"))
     {
         instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"111"+instruction;
     }
-    else if (instype.compare("ORI"))
+    else if (!instype.compare("ORI"))
     {
        instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"110"+instruction;
     }
-    else if (instype.compare("SLLI"))
+    else if (!instype.compare("SLLI"))
     {
         instruction="0000000"+hexaToBinaryConverter(imm,2).substr(3,5)+getRegisterValue(rs1)+"001"+instruction;
     }
-    else if (instype.compare("SLTI"))
+    else if (!instype.compare("SLTI"))
     {
        instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"010"+instruction;
     }
-    else if (instype.compare("SLTIU"))
+    else if (!instype.compare("SLTIU"))
     {
        instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"011"+instruction;
     }
-    else if (instype.compare("SRAI"))
+    else if (!instype.compare("SRAI"))
     {
         instruction="0100000"+hexaToBinaryConverter(imm,2).substr(3,5)+getRegisterValue(rs1)+"101"+instruction;
     }
-    else if (instype.compare("SRLI"))
+    else if (!instype.compare("SRLI"))
     {
         instruction="0000000"+hexaToBinaryConverter(imm,2).substr(3,5)+getRegisterValue(rs1)+"101"+instruction;
     }
-    else if (instype.compare("XORI"))
+    else if (!instype.compare("XORI"))
     {
         instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"100"+instruction;
     }
-    else if (instype.compare("LB"))
+    else if (!instype.compare("LB"))
     {
        instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"000"+getRegisterValue(rd)+"0000011";
     }
-    else if (instype.compare("LH"))
+    else if (!instype.compare("LH"))
     {
        instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"001"+getRegisterValue(rd)+"0000011";
     }
-    else if (instype.compare("LW"))
+    else if (!instype.compare("LW"))
     {
        instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"010"+getRegisterValue(rd)+"0000011";
     }
-    else if (instype.compare("LBU"))
+    else if (!instype.compare("LBU"))
     {
        instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"100"+getRegisterValue(rd)+"0000011";
     }
-    else if (instype.compare("LHU"))
+    else if (!instype.compare("LHU"))
     {
        instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"101"+getRegisterValue(rd)+"0000011";
     }
-    else if (instype.compare("JALR"))
+    else if (!instype.compare("JALR"))
     {
        instruction=hexaToBinaryConverter(imm,3)+getRegisterValue(rs1)+"000"+getRegisterValue(rd)+"1100111";
     }
@@ -93,43 +119,43 @@ string getItypeinstruction(string instype,string rs1,string imm){
 
 string getRtypeinstruction(string instype,string rs2,string rs1,string rd){
     string instruction=getRegisterValue(rd)+"0110011";
-    if (instype.compare("ADD"))
+    if (!instype.compare("ADD"))
     {
         instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"000"+instruction;
     }
-    else if (instype.compare("AND"))
+    else if (!instype.compare("AND"))
     {
         instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"111"+instruction;
     }
-    else if (instype.compare("OR"))
+    else if (!instype.compare("OR"))
     {
        instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"110"+instruction;
     }
-    else if (instype.compare("SLL"))
+    else if (!instype.compare("SLL"))
     {
         instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"001"+instruction;
     }
-    else if (instype.compare("SLT"))
+    else if (!instype.compare("SLT"))
     {
        instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"010"+instruction;
     }
-    else if (instype.compare("SLTU"))
+    else if (!instype.compare("SLTU"))
     {
        instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"011"+instruction;
     }
-    else if (instype.compare("SRA"))
+    else if (!instype.compare("SRA"))
     {
         instruction="0100000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"101"+instruction;
     }
-    else if (instype.compare("SRL"))
+    else if (!instype.compare("SRL"))
     {
         instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"101"+instruction;
     }
-    else if (instype.compare("SUB"))
+    else if (!instype.compare("SUB"))
     {
         instruction="0100000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"000"+instruction;
     }
-    else if (instype.compare("XOR"))
+    else if (!instype.compare("XOR"))
     {
         instruction="0000000"+getRegisterValue(rs2)+getRegisterValue(rs1)+"100"+instruction;
     }
