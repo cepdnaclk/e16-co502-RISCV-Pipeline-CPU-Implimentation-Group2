@@ -11,6 +11,8 @@ string hexaToBinaryConverter(string ,int);
 string getRtypeinstruction(string ,string ,string ,string);
 string getItypeinstruction(string ,string ,string,string);
 string getStypeinstruction(string ,string ,string ,string);
+string getUtypeinstruction(string ,string,string);
+string getJtypeinstruction(string ,string );
 
 
 
@@ -19,6 +21,30 @@ int main(int argc, char const *argv[])
     cout<< hexaToBinaryConverter("0xF2",2);
     // cout<< getRegisterValue("x13");;
     return 0;
+}
+
+string getJtypeinstruction(string rd,string imm){
+    string binary_imm=hexaToBinaryConverter(imm,5);
+    string instruction=binary_imm[0]+binary_imm.substr(10,10)+binary_imm[9]+binary_imm.substr(1,8)+getRegisterValue(rd)+"1101111";
+    return instruction;
+}
+
+string getUtypeinstruction(string instype,string rd,string imm){
+    string instruction=hexaToBinaryConverter(imm,5)+getRegisterValue(rd);
+    if (!instype.compare("LUI"))
+    {
+        instruction=instruction+"0110111";
+    }
+    else if (!instype.compare("AUIPC"))
+    {
+        instruction=instruction+"0010111";
+    }
+    else
+    {
+        return NULL;
+    }
+    
+    return instruction;
 }
 
 string getBtypeinstruction(string instype,string rs2,string rs1,string imm){
