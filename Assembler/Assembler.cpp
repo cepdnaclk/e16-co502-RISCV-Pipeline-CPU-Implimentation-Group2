@@ -21,6 +21,40 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
+string getBtypeinstruction(string instype,string rs2,string rs1,string imm){
+
+    string binary_imm=hexaToBinaryConverter(imm,3);
+    string instruction=binary_imm.substr(8,4)+binary_imm[1]+"1100011";     
+
+    if (!instype.compare("BEQ"))
+    {
+        instruction=binary_imm[0]+binary_imm.substr(2,6)+getRegisterValue(rs2)+getRegisterValue(rs1)+"000"+instruction;
+    }
+    else if (!instype.compare("BNE"))
+    {
+        instruction=binary_imm[0]+binary_imm.substr(2,6)+getRegisterValue(rs2)+getRegisterValue(rs1)+"001"+instruction;
+    }
+    else if (!instype.compare("BLT"))
+    {
+        instruction=binary_imm[0]+binary_imm.substr(2,6)+getRegisterValue(rs2)+getRegisterValue(rs1)+"100"+instruction;
+    }
+    else if (!instype.compare("BGE"))
+    {
+        instruction=binary_imm[0]+binary_imm.substr(2,6)+getRegisterValue(rs2)+getRegisterValue(rs1)+"101"+instruction;
+    }
+    else if (!instype.compare("BLTU"))
+    {
+        instruction=binary_imm[0]+binary_imm.substr(2,6)+getRegisterValue(rs2)+getRegisterValue(rs1)+"110"+instruction;
+    }
+    else if (!instype.compare("BGEU"))
+    {
+        instruction=binary_imm[0]+binary_imm.substr(2,6)+getRegisterValue(rs2)+getRegisterValue(rs1)+"111"+instruction;
+    }else{
+        return NULL;
+    }
+    return instruction;
+}
+
 string getStypeinstruction(string instype,string rs2,string rs1,string imm){
 
     string binary_imm=hexaToBinaryConverter(imm,3);
