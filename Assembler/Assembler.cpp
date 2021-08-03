@@ -13,6 +13,7 @@ string getItypeinstruction(string ,string ,string,string);
 string getStypeinstruction(string ,string ,string ,string);
 string getUtypeinstruction(string ,string,string);
 string getJtypeinstruction(string ,string );
+string getMtypeinstruction(string ,string ,string ,string);
 
 
 
@@ -21,6 +22,48 @@ int main(int argc, char const *argv[])
     cout<< hexaToBinaryConverter("0xF2",2);
     // cout<< getRegisterValue("x13");;
     return 0;
+}
+
+string getMtypeinstruction(string instype,string rs2,string rs1,string rd){
+    string instruction=getRegisterValue(rd)+"0110011";
+    string prepart="0000001"+getRegisterValue(rs2)+getRegisterValue(rs1);
+    if (!instype.compare("MUL"))
+    {
+        instruction=prepart+"000"+instruction;
+    }
+    else if (!instype.compare("MULH"))
+    {
+        instruction=prepart+"001"+instruction;
+    }
+    else if (!instype.compare("MULHSU"))
+    {
+       instruction=prepart+"010"+instruction;
+    }
+    else if (!instype.compare("MULHU"))
+    {
+        instruction=prepart+"011"+instruction;
+    }
+    else if (!instype.compare("DIV"))
+    {
+       instruction=prepart+"100"+instruction;
+    }
+    else if (!instype.compare("DIVU"))
+    {
+       instruction=prepart+"101"+instruction;
+    }
+    else if (!instype.compare("REM"))
+    {
+       instruction=prepart+"110"+instruction;
+    }
+    else if (!instype.compare("REMU"))
+    {
+       instruction=prepart+"111"+instruction;
+    }
+    else{
+        return NULL;
+    }
+    
+    return instruction;
 }
 
 string getJtypeinstruction(string rd,string imm){
