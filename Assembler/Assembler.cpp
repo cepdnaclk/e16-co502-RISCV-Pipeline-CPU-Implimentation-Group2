@@ -14,8 +14,50 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-string getRtypeInstruction(string instruction,string rs2,string rs1,string rd){
-
+string getRtypeinstype(string instype,string rs2,string rs1,string rd){
+    string instruction=getRegisterValue(rd)+"0110011";
+    if (instype.compare("ADD"))
+    {
+        instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"000"+instruction;
+    }
+    else if (instype.compare("AND"))
+    {
+        instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"111"+instruction;
+    }
+    else if (instype.compare("OR"))
+    {
+       instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"110"+instruction;
+    }
+    else if (instype.compare("SLL"))
+    {
+        instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"001"+instruction;
+    }
+    else if (instype.compare("SLT"))
+    {
+       instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"010"+instruction;
+    }
+    else if (instype.compare("SLTU"))
+    {
+       instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"011"+instruction;
+    }
+    else if (instype.compare("SRA"))
+    {
+        instruction="0100000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"101"+instruction;
+    }
+    else if (instype.compare("SRL"))
+    {
+        instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"101"+instruction;
+    }
+    else if (instype.compare("SUB"))
+    {
+        instruction="0100000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"000"+instruction;
+    }
+    else if (instype.compare("XOR"))
+    {
+        instruction="0000000"+getRegisterValue(rs1)+getRegisterValue(rs1)+"100"+instruction;
+    }
+    
+    return instruction;
 }
 
 string getRegisterValue(string reg){
