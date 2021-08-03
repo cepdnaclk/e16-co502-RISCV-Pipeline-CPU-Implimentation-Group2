@@ -35,5 +35,5 @@ jobs:
           sudo apt-get update
           sudo apt install g++
           cd Assembler
-          g++ tempCodeRunnerFile.cpp -o tempCodeRunnerFile
+          g++ Assembler.cpp -o tempCodeRunnerFile
           echo assembler compiled successfully
