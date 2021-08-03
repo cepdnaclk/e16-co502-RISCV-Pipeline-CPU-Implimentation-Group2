@@ -3,6 +3,8 @@ module Branch_jump_module (
     Branch_imm,
     Alu_Jump_imm,
     func_3,
+    branch_signal,
+    jump_signal,
     zero_signal,
     sign_bit_signal,
     sltu_bit_signal,
@@ -26,7 +28,7 @@ assign blt= (func_3[2]) & (~func_3[1]) &  (~func_3[0]) & (~zero_signal) & sign_b
 assign bltu= (func_3[2]) & (func_3[1]) &  (~func_3[0]) & (~zero_signal) & sltu_bit_signal;
 assign bgeu= (func_3[2]) & (func_3[1]) &  (func_3[0]) & (~sltu_bit_signal);
 
-//possible issue here, what happens if the instruction is a beq but its valid for bge??
+//possible issue here, what happens if the instruction is a beq but its also valid for bge??
 assign branch_jump_mux_signal=(branch_signal &(beq|bge|bne|blt|bltu|bgeu)) | (jump_signal);
 
 
