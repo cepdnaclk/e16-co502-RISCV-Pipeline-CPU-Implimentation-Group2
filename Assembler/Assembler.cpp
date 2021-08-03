@@ -7,10 +7,14 @@ using namespace std;
 
 
 string getRegisterValue(string);
+string hexaToBinaryConverter(string ,int);
+
+
 
 int main(int argc, char const *argv[])
 {
-    cout<< getRegisterValue("x13");;
+    cout<< hexaToBinaryConverter("0xF2",2);
+    // cout<< getRegisterValue("x13");;
     return 0;
 }
 
@@ -83,3 +87,86 @@ string getRegisterValue(string reg){
     throw "Invalid Register value";    
 }
 
+
+string hexaToBinaryConverter(string hexvalue,int noOfHexBits){
+    if (!((hexvalue[0]=='0') && (hexvalue[1]=='x') && (hexvalue.length()==noOfHexBits+2)))
+    {
+        throw "Invalid hex value ";
+    }
+    
+    string value;
+
+    for (int i = 2; i < noOfHexBits+2; i++)
+    {
+        if (hexvalue[i]=='0')
+        {
+            value=value+"0000";
+        }
+        else if (hexvalue[i]=='1')
+        {
+            value=value+"0001";
+        }
+        else if (hexvalue[i]=='2')
+        {
+            value=value+"0010";
+        }
+        else if (hexvalue[i]=='3')
+        {
+            value=value+"0011";
+        }
+        else if (hexvalue[i]=='4')
+        {
+            value=value+"0100";
+        }
+        else if (hexvalue[i]=='5')
+        {
+            value=value+"0101";
+        }
+        else if (hexvalue[i]=='6')
+        {
+            value=value+"0110";
+        }
+        else if (hexvalue[i]=='7')
+        {
+            value=value+"0111";
+        }
+        else if (hexvalue[i]=='8')
+        {
+            value=value+"1000";
+        }
+        else if (hexvalue[i]=='9')
+        {
+            value=value+"1001";
+        }
+        else if (hexvalue[i]=='A')
+        {
+            value=value+"1010";
+        }
+        else if (hexvalue[i]=='B')
+        {
+            value=value+"1011";
+        }
+        else if (hexvalue[i]=='C')
+        {
+            value=value+"1100";
+        }
+        else if (hexvalue[i]=='D')
+        {
+            value=value+"1101";
+        }
+        else if (hexvalue[i]=='E')
+        {
+            value=value+"1110";
+        }
+        else if (hexvalue[i]=='F')
+        {
+            value=value+"1111";
+        }
+        else
+        {
+            throw "Invalid hex value ";
+        }
+        
+    }
+    return value;
+}
