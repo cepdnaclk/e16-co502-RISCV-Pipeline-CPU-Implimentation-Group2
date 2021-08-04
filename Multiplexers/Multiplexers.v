@@ -28,7 +28,7 @@ endmodule
 module multiplexer_type3(IN1,IN2,IN3,OUT,SELECT);		//multiplexer
 	input [31:0] IN1,IN2,IN3;
 	input [1:0] SELECT;
-	output OUT;
+	output [31:0] OUT;
 
 	assign OUT = (SELECT[1]) ? (SELECT[0]? 32'bx:IN3) : (SELECT[0]? IN2:IN1) ;
 	
