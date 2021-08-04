@@ -1,9 +1,18 @@
 `timescale 1ns/100ps
+
+`include "../Data Memory module/cacheController.v"
+`include "../Data Memory module/cacheMemory.v"
+`include "../Data Memory module/data_memory.v"
+`include "../Instruction memory/instructionCache.v"
+`include "../Instruction memory/instructionCacheCTRL.v"
+`include "../Instruction memory/instructionMemory.v"
+`include "../RiscV CPU/RISC_V.v"
+
 module cpuTestbench;      //testbench module
 
     reg CLK, RESET;
     wire [31:0] PC;
-    wire cache_memRead,cache_memWrite,mem_Read,mem_Write,datamem_BusyWait,Inst_BusyWait,Inst_Read,instrCache_mem_busywait,cache_mem_busywait,Inst_hit;
+    wire cache_memRead,cache_memWrite,mem_Read,mem_Write,datamem_BusyWait,Inst_BusyWait,Inst_Read,instrCache_mem_busywait,cache_mem_busywait,Inst_hit,instHit_to_cache;
     wire [31:0] INSTRUCTION;
     wire [127:0] mem_Writedata,mem_Readdata;
     wire[27:0] mem_Address,Inst_Address; 
@@ -15,14 +24,14 @@ module cpuTestbench;      //testbench module
      CPU
     -----
     */
-    RiscV_CPU            group2_cpu(CLK, RESET, PC, INSTRUCTION,cache_memRead,cache_memWrite,Address,to_cache_memory,readData,instrCache_mem_busywait,cache_mem_busywait);
+    RiscV_CPU            group2_cpu(CLK, RESET, PC, INSTRUCTION,cache_memRead,cache_memWrite,Address,to_cache_memory,readData,instrCache_mem_busywait,cache_mem_busywait,Inst_hit,instHit_to_cache);
 
     /* 
     -----
      CACHE Memory
     -----
     */
-    cacheMemory    group2_cacheMemory(CLK,RESET,cache_memRead,cache_memWrite,Address,to_cache_memory,readData,cache_mem_busywait,mem_Read,mem_Write,mem_Address,mem_Writedata,mem_Readdata,datamem_BusyWait,Inst_hit);
+    cacheMemory    group2_cacheMemory(CLK,RESET,cache_memRead,cache_memWrite,Address,to_cache_memory,readData,cache_mem_busywait,mem_Read,mem_Write,mem_Address,mem_Writedata,mem_Readdata,datamem_BusyWait,instHit_to_cache);
 
     /* 
     -----
