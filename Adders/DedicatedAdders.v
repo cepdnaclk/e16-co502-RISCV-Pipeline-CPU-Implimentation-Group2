@@ -1,4 +1,5 @@
 //dedicated adder to ADD PC to Branch immidiate to resolve branch address
+`timescale  1ns/100ps
 
 module adder_type1(IN_1,IN_2,OUT);   
 input[31:0] IN_1;

@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 module Wire_module (
     Instruction,
     B_imm,

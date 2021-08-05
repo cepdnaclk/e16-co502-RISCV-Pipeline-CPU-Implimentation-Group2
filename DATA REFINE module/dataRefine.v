@@ -2,7 +2,7 @@
 
 //Delays should be introduced..
 //whole module is asynchronous(no clock needed)
-
+`timescale  1ns/100ps
 
 module dataRefine(LOAD,STORE,from_Dmem,DATA_IN,DATA_OUT,FUNCT3);	//module for Data refine for Data memory
     input LOAD,STORE;                                               //control signals for load or store

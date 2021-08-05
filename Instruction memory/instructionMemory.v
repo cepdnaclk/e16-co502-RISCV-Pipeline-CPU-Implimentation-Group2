@@ -1,3 +1,4 @@
+`timescale  1ns/100ps
 module Instruction_memory(
     clock,
     read,
@@ -24,15 +25,27 @@ begin
     readaccess = 0;
 
     // Sample program given below. You may hardcode your software program here, or load it from a file:
-         {memory_array[32'd3],  memory_array[32'd2],  memory_array[32'd1],  memory_array[32'd0]} <= 32'b00001000000000100000000000000101;           //   loadi 2 0x05
-         {memory_array[32'd7],  memory_array[32'd6],  memory_array[32'd5],  memory_array[32'd4]} <= 32'b00001000000000110000000010101101;           //   loadi 3 0xAD 
-         {memory_array[32'd11], memory_array[32'd10], memory_array[32'd9],  memory_array[32'd8]} <= 32'b00001000000001000000000000000011;         //   loadi 4 0x03
-         {memory_array[32'd15], memory_array[32'd14], memory_array[32'd13], memory_array[32'd12]} <= 32'b11110000000000000000001000000001;       //   swi 2 0x01
-         {memory_array[32'd19], memory_array[32'd18], memory_array[32'd17], memory_array[32'd16]} <= 32'b11110000000000000000001100000010;       //   swi 3 0x02
-         {memory_array[32'd23], memory_array[32'd22], memory_array[32'd21], memory_array[32'd20]} <= 32'b11111000000000000000010000000100;       //   swd 4 4
-         {memory_array[32'd27], memory_array[32'd26], memory_array[32'd25], memory_array[32'd24]} <= 32'b11100000000000100000000000000011;       //   lwi 2 0x03
-         {memory_array[32'd31], memory_array[32'd30], memory_array[32'd29], memory_array[32'd28]} <= 32'b11101000000000110000000000000100;      //   lwd 3 4
+         {memory_array[32'd3],  memory_array[32'd2],  memory_array[32'd1],  memory_array[32'd0]} <= 32'b10001111000100001000000010010011;           
+         {memory_array[32'd7],  memory_array[32'd6],  memory_array[32'd5],  memory_array[32'd4]} <= 32'b10001111000110001000100010010011;           
+         {memory_array[32'd11], memory_array[32'd10], memory_array[32'd9],  memory_array[32'd8]} <= 32'b00000000000000000000000000000000;         
+         {memory_array[32'd15], memory_array[32'd14], memory_array[32'd13], memory_array[32'd12]} <= 32'b00000000000000000000000000000000;       
+         {memory_array[32'd19], memory_array[32'd18], memory_array[32'd17], memory_array[32'd16]} <= 32'b10000000000010001110011000010011;       
+         {memory_array[32'd23], memory_array[32'd22], memory_array[32'd21], memory_array[32'd20]} <= 32'b00000000000000000000000000000000;       
+         {memory_array[32'd27], memory_array[32'd26], memory_array[32'd25], memory_array[32'd24]} <= 32'b00000000101110001111011010110011;       
+         {memory_array[32'd31], memory_array[32'd30], memory_array[32'd29], memory_array[32'd28]} <= 32'b00000000000000000000000000000000;      
+         {memory_array[32'd35], memory_array[32'd34], memory_array[32'd33], memory_array[32'd32]} <= 32'b00000000000000000000000000000000;
+         {memory_array[32'd39], memory_array[32'd38], memory_array[32'd37], memory_array[32'd36]} <= 32'b00000000000101101000011000000011;
+         {memory_array[32'd43], memory_array[32'd42], memory_array[32'd41], memory_array[32'd40]} <= 32'b00000010010100100000010001100011;
+         {memory_array[32'd47], memory_array[32'd46], memory_array[32'd45], memory_array[32'd44]} <= 32'b00000000000000000000000000000000;
+         {memory_array[32'd51], memory_array[32'd50], memory_array[32'd49], memory_array[32'd48]} <= 32'b00000000000000000000000000000000;
 end
+
+//ADDI x1,x1,0x8F1
+//ADDI x17,x17,0x8F1
+//ORI x12,x17,0x800
+//AND x13,x17,x11
+//LB x12,0x001(x13)
+//BEQ x4,x5,0x014
 
 //Detecting an incoming memory access
 always @(read)

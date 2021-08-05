@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 module InstructionfetchModule (
     CLK,
     RESET,
@@ -32,6 +34,7 @@ end
 
 
 always @(posedge CLK) begin //update the pc value depend on the positive clock edge
+    #1                         //!delay updated because PC wont update as soon as busywait zeroed
     if(busywait == 1'b0)begin //update the pc when only busywait is zero 
         case (jump_branch_signal)
             1'b1:begin

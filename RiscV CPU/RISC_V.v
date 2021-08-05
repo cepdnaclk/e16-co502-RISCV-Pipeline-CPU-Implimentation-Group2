@@ -156,7 +156,7 @@ multiplexer_type1        RiscV_mux1(data1_out_pipe2,PC_out_pipe2,DATA1_in,mux_1_
 multiplexer_type1        RiscV_mux5(mux_2_out_out_pipe2,data2_out_pipe2,DATA2_in,mux_5_sel_out_pipe2);
 alu                      RiscV_alu(DATA1_in,DATA2_in,Alu_RESULT,ALUop_out_pipe2,zero_signal,sign_bit_signal,sltu_bit_signal);
 multiplexer_type3        RiscV_mux4(mux_2_out_out_pipe2,Alu_RESULT,nextPC_out_pipe2,mux_4_out,mux_4_sel_out_pipe2);
-Branch_jump_module       RiscV_BJmodule(PC_out_pipe2,mux_2_out_out_pipe2,Alu_RESULT,Funct3_out_pipe2,branch_out_pipe2,jump_out_pipe2,zero_signal,sign_bit_signal,sltu_bit_signal,jump_branch_pc,pcmux_select);
+Branch_jump_module       RiscV_BJmodule(RESET,PC_out_pipe2,mux_2_out_out_pipe2,Alu_RESULT,Funct3_out_pipe2,branch_out_pipe2,jump_out_pipe2,zero_signal,sign_bit_signal,sltu_bit_signal,jump_branch_pc,pcmux_select);
 
 /* 
     -----
