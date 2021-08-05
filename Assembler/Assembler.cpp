@@ -14,6 +14,7 @@ string getUtypeinstruction(string, string, string);
 string getJtypeinstruction(string, string);
 string getMtypeinstruction(string, string, string, string);
 string getBtypeinstruction(string, string, string, string);
+bool checkDataHazard(string ,string );
 
 int main(int argc, char const *argv[])
 {
@@ -35,6 +36,8 @@ int main(int argc, char const *argv[])
     ifstream readfile(argv[1]);
     string line;
     string nop="00000000000000000000000000000000";
+    string prev_instruction_rd="";
+    string prev_prev_instruction_rd="";
     while (getline(readfile, line))
     {
         vector<string> instruction_keys;
@@ -67,29 +70,65 @@ int main(int argc, char const *argv[])
 
         string binary_instruction;
 
-        if ((!instruction_keys[0].compare("LUI"))||(!instruction_keys[0].compare("LUI")))
+        if ((!instruction_keys[0].compare("LUI"))||(!instruction_keys[0].compare("AUIPC")))
         {
             binary_instruction=getUtypeinstruction(instruction_keys[0],instruction_keys[1],instruction_keys[2]);
+            prev_prev_instruction_rd=prev_instruction_rd;
+            prev_instruction_rd=instruction_keys[1];
             writefile<<binary_instruction<<endl;
         }
         else if (!instruction_keys[0].compare("JAL"))
         {
             binary_instruction=getJtypeinstruction(instruction_keys[0],instruction_keys[1]);
             writefile<<binary_instruction<<endl;
+            writefile<<nop<<endl;
+            writefile<<nop<<endl;
         }
         else if ((!instruction_keys[0].compare("MUL"))||(!instruction_keys[0].compare("MULH"))||(!instruction_keys[0].compare("MULHSU"))||(!instruction_keys[0].compare("MULHU"))||(!instruction_keys[0].compare("DIV"))||(!instruction_keys[0].compare("DIVU"))||(!instruction_keys[0].compare("REM"))||(!instruction_keys[0].compare("REMU")))
         {
             binary_instruction=getMtypeinstruction(instruction_keys[0],instruction_keys[3],instruction_keys[2],instruction_keys[1]);
+            if (checkDataHazard(instruction_keys[3],prev_prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_prev_instruction_rd))
+            {
+                writefile<<nop<<endl;
+            }
+            else if (checkDataHazard(instruction_keys[3],prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_instruction_rd))
+            {
+                writefile<<nop<<endl;
+                writefile<<nop<<endl;
+            }
+            prev_prev_instruction_rd=prev_instruction_rd;
+            prev_instruction_rd=instruction_keys[1];
             writefile<<binary_instruction<<endl;
+            
         }
         else if ((!instruction_keys[0].compare("AND"))||(!instruction_keys[0].compare("ADD"))||(!instruction_keys[0].compare("OR"))||(!instruction_keys[0].compare("SLL"))||(!instruction_keys[0].compare("SLT"))||(!instruction_keys[0].compare("SLTUU"))||(!instruction_keys[0].compare("SRA"))||(!instruction_keys[0].compare("SRL"))||(!instruction_keys[0].compare("SUB"))||(!instruction_keys[0].compare("XOR")))
         {
             binary_instruction=getRtypeinstruction(instruction_keys[0],instruction_keys[3],instruction_keys[2],instruction_keys[1]);
+            if (checkDataHazard(instruction_keys[3],prev_prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_prev_instruction_rd))
+            {
+                writefile<<nop<<endl;
+            }
+            else if (checkDataHazard(instruction_keys[3],prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_instruction_rd))
+            {
+                writefile<<nop<<endl;
+                writefile<<nop<<endl;
+            }
+            prev_prev_instruction_rd=prev_instruction_rd;
+            prev_instruction_rd=instruction_keys[1];
             writefile<<binary_instruction<<endl;
         }
         else if ((!instruction_keys[0].compare("SB"))||(!instruction_keys[0].compare("SH"))||(!instruction_keys[0].compare("SW")))
         {
             binary_instruction=getStypeinstruction(instruction_keys[0],instruction_keys[1],instruction_keys[2],instruction_keys[3]);
+            if (checkDataHazard(instruction_keys[1],prev_prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_prev_instruction_rd))
+            {
+                writefile<<nop<<endl;
+            }
+            else if (checkDataHazard(instruction_keys[1],prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_instruction_rd))
+            {
+                writefile<<nop<<endl;
+                writefile<<nop<<endl;
+            }
             writefile<<binary_instruction<<endl;
         }
         else if ((!instruction_keys[0].compare("BEQ"))||(!instruction_keys[0].compare("BGE"))||(!instruction_keys[0].compare("BGEU"))||(!instruction_keys[0].compare("BLT"))||(!instruction_keys[0].compare("BLTU"))||(!instruction_keys[0].compare("BNE")))
@@ -105,6 +144,17 @@ int main(int argc, char const *argv[])
             {
                 throw "Invalid instruction";
             }
+            if (checkDataHazard(instruction_keys[2],prev_prev_instruction_rd))
+            {
+                writefile<<nop<<endl;
+            }
+            else if (checkDataHazard(instruction_keys[2],prev_instruction_rd))
+            {
+                writefile<<nop<<endl;
+                writefile<<nop<<endl;
+            }
+            prev_prev_instruction_rd=prev_instruction_rd;
+            prev_instruction_rd=instruction_keys[1];
             writefile<<binary_instruction<<endl;
         }
         
@@ -113,6 +163,14 @@ int main(int argc, char const *argv[])
     readfile.close();
     writefile.close();
     return 0;
+}
+
+bool checkDataHazard(string rs,string rd){
+    if (!rs.compare(rd))
+    {
+        return true;
+    }
+    return false; 
 }
 
 string getMtypeinstruction(string instype, string rs2, string rs1, string rd)

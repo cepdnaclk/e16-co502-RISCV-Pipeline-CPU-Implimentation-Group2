@@ -1,7 +1,7 @@
 
 `include "../Adders/DedicatedAdders.v"
 `include "../ALU module/ALU.v"
-`include "../Branch and Jump Unit/Branch_jump_module.v"
+`include "../Branch and Jump Unit/Branch_Jump_module.v"
 `include "../CONTROL UNIT module/controlUnit.v"
 `include "../Data Refining module/Data_ref_module.v"
 `include "../Extension Wire module/Wire_module.v"
