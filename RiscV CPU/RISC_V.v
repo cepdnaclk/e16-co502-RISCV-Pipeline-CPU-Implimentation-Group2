@@ -86,7 +86,7 @@ wire[31:0] reg_writedata;
 // adder_type2             RiscV_PCAdder(PC,nextPC);
 
 
-InstructionfetchModule     RiscV_instrFetch(CLK,RESET,instruction_mem_busywait,data_mem_busywait,pcmux_select,PC,nextPC,jump_branch_pc);
+InstructionfetchModule     RiscV_instrFetch(CLK,RESET,instrCache_mem_busywait,cache_mem_busywait,pcmux_select,PC,nextPC,jump_branch_pc);
 
 // instructionCache        RiscV_instrCache(CLK,RESET,PC,readInstruction,busywait,mem_Read,mem_Address,mem_Readdata,mem_BusyWait,hit);
 // Instruction_memory      RiscV_instrmemory(CLK,mem_Read,mem_Address,mem_Readdata,mem_BusyWait);
