@@ -85,7 +85,8 @@ assign #1 readInstruction = instExtract;
 reg Busywait;                                        
 always @(PC)                                             
 begin
-    Busywait = 1;               
+    #1
+    Busywait = 1'b1;               
 end
 
 

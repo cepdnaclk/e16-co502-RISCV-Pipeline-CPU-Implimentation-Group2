@@ -32,7 +32,7 @@ end
 
 
 always @(posedge CLK) begin //update the pc value depend on the positive clock edge
-    if(busywait==1'b0)begin //update the pc when only busywait is zero 
+    if(busywait == 1'b0)begin //update the pc when only busywait is zero 
         case (jump_branch_signal)
             1'b1:begin
                 PC=Jump_Branch_PC;
