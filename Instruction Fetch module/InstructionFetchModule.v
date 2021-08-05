@@ -1,17 +1,20 @@
 module InstructionfetchModule (
+    CLK,
     RESET,
     instruction_mem_busywait,
     data_mem_busywait,
     jump_branch_signal,
-    PC
-
+    PC,
+    INCREMENTED_PC_by_four,
+    Jump_Branch_PC
 );
 
 output reg [31:0] PC,INCREMENTED_PC_by_four;
 input wire CLK,RESET,instruction_mem_busywait,data_mem_busywait,jump_branch_signal;
+input wire [31:0] Jump_Branch_PC;
 
 wire busywait;
-wire [31:0] Jump_Branch_PC;
+
 
 
 // busywait signal enable whenever data memmory busywait or instruction memory busywait enables

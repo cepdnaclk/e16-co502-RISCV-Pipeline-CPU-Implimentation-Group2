@@ -56,7 +56,7 @@ end
 
 /* dividing address to respective tag index and offset Asynchronousyly */
 always@(address) begin
- if(Inst_hit)begin               //LAB6 PART3 UPDATE:- checking Inst_hit is asserted
+ if(Inst_hit)begin               //checking Inst_hit is asserted
      if(read || write)begin
      #1
     baseAddress = address;
