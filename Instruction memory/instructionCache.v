@@ -23,7 +23,7 @@ reg[127:0] cache [0:7];
 reg[24:0] cacheTag [0:7];
 reg cacheValid [0:7];
 
-reg[3:0] Offset;
+reg[1:0] Offset;
 reg[2:0] Index;
 reg[24:0] Tag;
 // reg[31:0] address;
@@ -34,7 +34,7 @@ reg[24:0] Tag;
 //    end 
 // end
 
-/* dividing address to respective tag index and offset Asynchronousyly */
+/* dividing address to respective tag index and offset Asynchronously */
 always@(PC) begin
  #1
  if(!PC[31])begin
@@ -66,12 +66,12 @@ assign hit =  (comparatorOut && cacheValid[Index])? 1:0;  //resolve hit state wh
 // wire[31:0] readInstruction;
 // assign #1 readInstruction = instructionExtractMuxOut;
 
-reg[7:0] instExtract;      //!check this
+reg[31:0] instExtract;      //!check this
 wire[127:0] data;
 assign data = cache[Index];
 always @(*)
 begin
-    case(Offset)        //!relevent 32 bits are selected
+    case(Offset)                           //relevent 32 bits are selected
     2'b00: instExtract = data[31:0] ;
     2'b01: instExtract = data[63:32] ;
     2'b10: instExtract = data[95:64] ;
@@ -81,11 +81,12 @@ end
 wire readInstruction;
 assign #1 readInstruction = instExtract;
 
-/*set busywait whenever a address signal received*/
+/*set busywait whenever an address signal received*/
 reg Busywait;                                        
 always @(PC)                                             
 begin
-    Busywait = 1;               
+    #1
+    Busywait = 1'b1;               
 end
 
 
