@@ -1,3 +1,7 @@
+Run Assmbler
+g++ Assembler.cpp 
+./a.out <path to assembly file>  <output file name(optinal)>
+
 ----------------------------------------------------------------------------------------------------
 Every Assembly code instruction should be in capital form.
 
