@@ -1,5 +1,5 @@
 //       #########         CONTROL UNIT        ########
-
+`timescale  1ns/100ps
 //Delays are introduced..
 //compatible with the new datapath.. updated 26/7/2021
 
@@ -106,7 +106,7 @@ module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
                 mux2_select = 3'b000;
                 mux3_select = 1'bx;
                 mux4_select = 2'b01;
-                mux5_select = 1'b1;
+                mux5_select = 1'b0;
                 writeEnable = 1'b0;
                 memRead = 1'b0;
                 memWrite = 1'b0;
@@ -120,7 +120,7 @@ module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
                 mux2_select = 3'b001;
                 mux3_select = 1'b1;
                 mux4_select = 2'b01;
-                mux5_select = 1'b1;
+                mux5_select = 1'b0;
                 writeEnable = 1'b1;
                 memRead = 1'b1;
                 memWrite = 1'b0;
@@ -134,7 +134,7 @@ module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
                 mux2_select = 3'b001;
                 mux3_select = 1'b1;
                 mux4_select = 2'b01;
-                mux5_select = 1'b1;
+                mux5_select = 1'b0;
                 writeEnable = 1'b0;
                 memRead = 1'b0;
                 memWrite = 1'b1;
@@ -148,7 +148,7 @@ module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
                 mux2_select = 3'b010;
                 mux3_select = 1'b0;
                 mux4_select = 2'b01;
-                mux5_select = 1'b1;
+                mux5_select = 1'b0;
                 writeEnable = 1'b1;
                 memRead = 1'b0;
                 memWrite = 1'b0;
@@ -178,176 +178,138 @@ module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
     -----
     */    
     assign specific_OP = {funct7_A,funct7_B,funct3,instr_type};      //concatenation
-    always @(specific_OP) begin
+    always @(*) begin
+        #1                                                   //delay occured by combinational logic
         casex(specific_OP)
             9'bxxxxx0000: begin                             //LUI//                                                            U type (lui) instruction
-                #1                                         //delay occured by combinational logic
                 AlUop         = 5'bxxxxx;
 
             end
             9'bxxxxx0001: begin                             //AUIPC//                                                          auipc
-                #1                                         //delay occured by combinational logic
                 AlUop         = 5'b00000;
 
             end
             9'bxxxxx0010: begin                             //JAL//                                                            jal
-                #1                                         //delay occured by combinational logic
                 AlUop         = 5'b00000;
 
             end
             9'bxxxxx0011: begin                             //JALR//                                                           jalr instruction
-                #1                                         //delay occured by combinational logic
                 AlUop         = 5'b00000;
 
             end
             9'bxx0000100: begin                           //BEQ //                                                             B type instructions
-                #1                                         //delay occured by combinational logic
                 AlUop         = 5'b00001;
 
             end
-            9'bxx0010100: begin                          //BNE //
-                #1                                         //delay occured by combinational logic     
+            9'bxx0010100: begin                          //BNE //     
                 AlUop         = 5'b00001;
 
             end
-            9'bxx1000100: begin                         //BLT//
-                #1                                         //delay occured by combinational logic             
+            9'bxx1000100: begin                         //BLT//             
                 AlUop         = 5'b00001;
 
             end
-            9'bxx1010100: begin                         //BGE//
-                #1                                         //delay occured by combinational logic        
+            9'bxx1010100: begin                         //BGE//        
                 AlUop         = 5'b00001;
 
             end
-            9'bxx1100100: begin                        //BLTU//  
-                #1                                         //delay occured by combinational logic 
+            9'bxx1100100: begin                        //BLTU//   
                 AlUop         = 5'b00001;
 
             end
-            9'bxx1110100: begin                       //BGEU //   
-                #1                                         //delay occured by combinational logic     
+            9'bxx1110100: begin                       //BGEU //        
                 AlUop         = 5'b00001;
 
             end
             //I type(Load) and store type specific opcodes have to be finalized
 
-            9'bxxxxx0101: begin                       //Load instructions//                                             I type (load) instructions
-                #1                                         //delay occured by combinational logic   
+            9'bxxxxx0101: begin                       //Load instructions//                                             I type (load) instructions   
                 AlUop         = 5'b00000;
             end
 
-            9'bxxxxx0110: begin                       //store instructions//                                             S type instructions
-                #1                                         //delay occured by combinational logic    
+            9'bxxxxx0110: begin                       //store instructions//                                             S type instructions    
                 AlUop         = 5'b00000;
             end
             
-            9'bxx0000111: begin                          //ADDI//                                                       I type instructions
-                #1                                         //delay occured by combinational logic           
+            9'bxx0000111: begin                          //ADDI//                                                       I type instructions           
                 AlUop         = 5'b00000;
             end
-            9'bxx0100111: begin                         //SLTI            //  
-                #1                                         //delay occured by combinational logic           
+            9'bxx0100111: begin                         //SLTI            //             
                 AlUop         = 5'b10000;
             end
-            9'bxx0110111: begin                        //SLTiU        //   
-                #1                                         //delay occured by combinational logic                         
+            9'bxx0110111: begin                        //SLTiU        //                            
                 AlUop         = 5'b00001;
             end
-            9'bxx1000111: begin                        //XORI           //   
-                #1                                         //delay occured by combinational logic                   
+            9'bxx1000111: begin                        //XORI           //                      
                 AlUop         = 5'b00100;
             end
-            9'bxx1100111: begin                       //ORI         //   
-                #1                                         //delay occured by combinational logic             
+            9'bxx1100111: begin                       //ORI         //                
                 AlUop         = 5'b00011;
             end
-            9'bxx1110111: begin                       //ANDI      //    
-                #1                                         //delay occured by combinational logic                          
+            9'bxx1110111: begin                       //ANDI      //                              
                 AlUop         = 5'b00010;
             end
-            9'b000010111: begin                       //SLLI    //     
-                #1                                         //delay occured by combinational logic                           
+            9'b000010111: begin                       //SLLI    //                                
                 AlUop         = 5'b00101;
             end
             9'b001010111: begin                       //SRLI  //     
-                #1                                         //delay occured by combinational logic
                 AlUop         = 5'b00110;
             end
             9'b101010111: begin                       //SRAI//       
-                #1                                         //delay occured by combinational logic
                 AlUop         = 5'b00111;
             end
-            9'b001011000: begin                       //R type(ADD)   //                                                  R type instructions
-                #1                                         //delay occured by combinational logic             
+            9'b001011000: begin                       //R type(ADD)   //                                                  R type instructions             
                 AlUop         = 5'b00000;
             end
             9'b101011000: begin                         //SUB //
-                #1                                         //delay occured by combinational logic
                 AlUop         = 5'b00001;
             end
-            9'b001011000: begin                        //SLL //   
-                #1                                         //delay occured by combinational logic                      
+            9'b001011000: begin                        //SLL //                         
                 AlUop         = 5'b00101;
             end
-            9'b001011000: begin                         //SLT //    
-                #1                                         //delay occured by combinational logic  
+            9'b001011000: begin                         //SLT //      
                 AlUop         = 5'b10000;
             end
-            9'b001011000: begin                         //SLTU //  
-                #1                                         //delay occured by combinational logic  
+            9'b001011000: begin                         //SLTU //    
                 AlUop         = 5'b10001;
             end
             9'b001011000: begin                        //XOR //   
-                #1                                         //delay occured by combinational logic
                 AlUop         = 5'b00100;
             end
-            9'b001011000: begin                        //SRL //   
-                #1                                         //delay occured by combinational logic   
+            9'b001011000: begin                        //SRL //      
                 AlUop         = 5'b00110;
             end
             9'b101011000: begin                         //SRA //      
-                #1                                         //delay occured by combinational logic
                 AlUop         = 5'b00111;
             end
             9'b001011000: begin                         //OR  //   
-                #1                                         //delay occured by combinational logic
                 AlUop         = 5'b00011;
             end
-            9'b001011000: begin                         //AND //     
-                #1                                         //delay occured by combinational logic     
+            9'b001011000: begin                         //AND //          
                 AlUop         = 5'b00010;
             end
-            9'b011011000: begin                //M extention instructions (MUL)    //                                           M extention instructions
-                #1                                         //delay occured by combinational logic                   
+            9'b011011000: begin                //M extention instructions (MUL)    //                                           M extention instructions                   
                 AlUop         = 5'b01000;
             end
-            9'b011011000: begin               //MULH //         
-                #1                                         //delay occured by combinational logic                      
+            9'b011011000: begin               //MULH //                               
                 AlUop         = 5'b01001;
             end
-            9'b011011000: begin                //MULHSU//
-                #1                                         //delay occured by combinational logic                                  
+            9'b011011000: begin                //MULHSU//                                  
                 AlUop         = 5'b01010;     
             end
-            9'b011011000: begin               //MULHU  //        
-                #1                                         //delay occured by combinational logic               
+            9'b011011000: begin               //MULHU  //                       
                 AlUop         = 5'b01011;
             end
-            9'b011011000: begin               //DIV  //        
-                #1                                         //delay occured by combinational logic           
+            9'b011011000: begin               //DIV  //                   
                 AlUop         = 5'b01100;
             end
-            9'b011011000: begin                //DIVU //       
-                #1                                         //delay occured by combinational logic            
+            9'b011011000: begin                //DIVU //                   
                 AlUop         = 5'b01101;
             end
-            9'b011011000: begin               //REM //            
-                #1                                         //delay occured by combinational logic                  
+            9'b011011000: begin               //REM //                              
                 AlUop         = 5'b01110;
             end
-            9'b011011000: begin              //REMU  //          
-                #1                                         //delay occured by combinational logic               
+            9'b011011000: begin              //REMU  //                         
                 AlUop         = 5'b01111;
             end
         endcase       

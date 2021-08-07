@@ -7,7 +7,7 @@ module multiplexer_type1(IN1,IN2,OUT,SELECT);
 	input SELECT;
 	output [31:0] OUT;
 
-	assign OUT = (SELECT) ? IN1 : IN2 ;
+	assign OUT = (SELECT) ? IN2 : IN1 ;
 	
 endmodule
 

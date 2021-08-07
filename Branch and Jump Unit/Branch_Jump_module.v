@@ -1,4 +1,7 @@
+`timescale  1ns/100ps
+
 module Branch_jump_module (
+    RESET,
     PC,
     Branch_imm,
     Alu_Jump_imm,
@@ -14,9 +17,9 @@ module Branch_jump_module (
 
 input [31:0] PC,Branch_imm,Alu_Jump_imm;
 input [2:0] func_3;
-input branch_signal,jump_signal,zero_signal,sign_bit_signal,sltu_bit_signal;
+input RESET,branch_signal,jump_signal,zero_signal,sign_bit_signal,sltu_bit_signal;
 
-output branch_jump_mux_signal;
+output reg branch_jump_mux_signal;
 output reg [31:0] Branch_jump_PC_OUT;
 
 wire beq,bge,bne,blt,bltu,bgeu;
@@ -28,9 +31,13 @@ assign blt= (func_3[2]) & (~func_3[1]) &  (~func_3[0]) & (~zero_signal) & sign_b
 assign bltu= (func_3[2]) & (func_3[1]) &  (~func_3[0]) & (~zero_signal) & sltu_bit_signal;
 assign bgeu= (func_3[2]) & (func_3[1]) &  (func_3[0]) & (~sltu_bit_signal);
 
+always @(branch_signal,jump_signal)begin
+    branch_jump_mux_signal=(branch_signal &(beq|bge|bne|blt|bltu|bgeu)) | (jump_signal);  //!change this
+end
 
-assign branch_jump_mux_signal=(branch_signal &(beq|bge|bne|blt|bltu|bgeu)) | (jump_signal) && 1'b0;  //!change this
-
+always @(RESET)begin
+    branch_jump_mux_signal = 1'b0;
+end
 
 always @(*) begin
     if (jump_signal==1'b1) begin

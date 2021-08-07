@@ -1,6 +1,7 @@
 //       #########         REG FILE        ########
 
-//implementation error: inputs should be either directly decode from instruction or decoder should be given through control unit 
+`timescale  1ns/100ps
+
 module reg_file(CLK,RESET,IN,OUT1,OUT2,INADDRESS,OUT1ADDRESS,OUT2ADDRESS,WRITE,InstHIT);
 
 	input [4:0] OUT1ADDRESS,OUT2ADDRESS,INADDRESS;    //5 bit addresses

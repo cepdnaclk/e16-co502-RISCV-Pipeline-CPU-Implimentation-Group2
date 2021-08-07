@@ -1,5 +1,5 @@
 //       #########         ALU        ########
-
+`timescale  1ns/100ps
 
 module alu(DATA1,DATA2,RESULT,SELECT,zero_signal,sign_bit_signal,sltu_bit_signal);	//module for ALU
     input [31:0]DATA1,DATA2;                                             //define 32bit tw0 inputs DATA1 and DATA2

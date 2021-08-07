@@ -2,6 +2,7 @@
 
 /* This module is an asynchronous module which do modifications to the data memory outputs
     according to the instruction   */
+`timescale  1ns/100ps
 
 module Data_ref_module (
     func3,
