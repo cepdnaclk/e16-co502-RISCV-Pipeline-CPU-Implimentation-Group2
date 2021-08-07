@@ -1,0 +1,9 @@
+ADDI x1,x1,0x8F1
+ORI x12,x1,0x800 
+
+SB x1,0xF23(x12)  
+
+LB x2,0xF23(x12) 
+SW  x12,0xF23(x1) 
+LW x13,0xF23(x1)
+SW  x13,0xF23(x1)

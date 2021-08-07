@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <cstring>
 
 using namespace std;
 
@@ -40,12 +41,24 @@ int main(int argc, char const *argv[])
     string prev_prev_instruction_rd="";
     while (getline(readfile, line))
     {
+        if (line.empty())
+        {
+            continue;
+        }
         vector<string> instruction_keys;
         size_t pos = 0;  
         string delim=" ";
         pos = line.find(delim);
         instruction_keys.push_back(line.substr(0, pos));
         line.erase(0, pos + delim.length());
+        while (( pos = line.find (delim)) != std::string::npos){
+            line.erase(pos, pos + delim.length());
+        };
+        delim="//";
+        while (( pos = line.find (delim)) != std::string::npos)  
+        {      
+            line.erase(pos,line.length()+1-pos);   
+        }
         delim=",";
         pos = 0;
         while (( pos = line.find (delim)) != std::string::npos)  
@@ -142,6 +155,7 @@ int main(int argc, char const *argv[])
             binary_instruction=getItypeinstruction(instruction_keys[0],instruction_keys[2],instruction_keys[3],instruction_keys[1]);
             if (binary_instruction.empty())
             {
+                cout<<"Invalid instruction"<<endl;
                 throw "Invalid instruction";
             }
             if (checkDataHazard(instruction_keys[2],prev_prev_instruction_rd))
@@ -452,6 +466,7 @@ string getRegisterValue(string reg)
             return value;
         }
     }
+    cout<<"Invalid Register value"<<endl;
     throw "Invalid Register value";
 }
 
@@ -459,6 +474,7 @@ string hexaToBinaryConverter(string hexvalue, int noOfHexBits)
 {
     if (!((hexvalue[0] == '0') && (hexvalue[1] == 'x') && (hexvalue.length() == noOfHexBits + 2)))
     {
+        cout<<"Invalid hex value"<<endl;
         throw "Invalid hex value ";
     }
 
@@ -532,6 +548,7 @@ string hexaToBinaryConverter(string hexvalue, int noOfHexBits)
         }
         else
         {
+            cout<<"Invalid hex value"<<endl;
             throw "Invalid hex value ";
         }
     }
