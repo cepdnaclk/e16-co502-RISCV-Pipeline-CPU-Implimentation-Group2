@@ -96,6 +96,8 @@ int main(int argc, char const *argv[])
             writefile<<binary_instruction<<endl;
             writefile<<nop<<endl;
             writefile<<nop<<endl;
+            prev_prev_instruction_rd="";
+            prev_instruction_rd="";
         }
         else if ((!instruction_keys[0].compare("MUL"))||(!instruction_keys[0].compare("MULH"))||(!instruction_keys[0].compare("MULHSU"))||(!instruction_keys[0].compare("MULHU"))||(!instruction_keys[0].compare("DIV"))||(!instruction_keys[0].compare("DIVU"))||(!instruction_keys[0].compare("REM"))||(!instruction_keys[0].compare("REMU")))
         {
@@ -156,6 +158,8 @@ int main(int argc, char const *argv[])
             writefile<<binary_instruction<<endl;
             writefile<<nop<<endl;
             writefile<<nop<<endl;
+            prev_prev_instruction_rd="";
+            prev_instruction_rd="";
         }
         else{
             binary_instruction=getItypeinstruction(instruction_keys[0],instruction_keys[2],instruction_keys[3],instruction_keys[1]);
@@ -175,9 +179,18 @@ int main(int argc, char const *argv[])
                 writefile<<nop<<endl;
                 writefile<<nop<<endl;
             }
-            prev_prev_instruction_rd=prev_instruction_rd;
-            prev_instruction_rd=instruction_keys[1];
-            writefile<<binary_instruction<<endl;
+            if(!instruction_keys[0].compare("JALR"))){
+                prev_prev_instruction_rd="";
+                prev_instruction_rd="";
+                writefile<<nop<<endl;
+                writefile<<nop<<endl;
+                writefile<<binary_instruction<<endl;
+            }else{
+                prev_prev_instruction_rd=prev_instruction_rd;
+                prev_instruction_rd=instruction_keys[1];
+                writefile<<binary_instruction<<endl;
+            }
+
         }
         
     }
