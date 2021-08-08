@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <cstring>
 
 using namespace std;
 
@@ -40,12 +41,24 @@ int main(int argc, char const *argv[])
     string prev_prev_instruction_rd="";
     while (getline(readfile, line))
     {
+        if (line.empty())
+        {
+            continue;
+        }
         vector<string> instruction_keys;
         size_t pos = 0;  
         string delim=" ";
         pos = line.find(delim);
         instruction_keys.push_back(line.substr(0, pos));
         line.erase(0, pos + delim.length());
+        while (( pos = line.find (delim)) != std::string::npos){
+            line.erase(pos, pos + delim.length());
+        };
+        delim="//";
+        while (( pos = line.find (delim)) != std::string::npos)  
+        {      
+            line.erase(pos,line.length()+1-pos);   
+        }
         delim=",";
         pos = 0;
         while (( pos = line.find (delim)) != std::string::npos)  
@@ -83,15 +96,19 @@ int main(int argc, char const *argv[])
             writefile<<binary_instruction<<endl;
             writefile<<nop<<endl;
             writefile<<nop<<endl;
+            prev_prev_instruction_rd="";
+            prev_instruction_rd="";
         }
         else if ((!instruction_keys[0].compare("MUL"))||(!instruction_keys[0].compare("MULH"))||(!instruction_keys[0].compare("MULHSU"))||(!instruction_keys[0].compare("MULHU"))||(!instruction_keys[0].compare("DIV"))||(!instruction_keys[0].compare("DIVU"))||(!instruction_keys[0].compare("REM"))||(!instruction_keys[0].compare("REMU")))
         {
             binary_instruction=getMtypeinstruction(instruction_keys[0],instruction_keys[3],instruction_keys[2],instruction_keys[1]);
-            if (checkDataHazard(instruction_keys[3],prev_prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_prev_instruction_rd))
+            
+            if (checkDataHazard(instruction_keys[3],prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_instruction_rd))
             {
                 writefile<<nop<<endl;
-            }
-            else if (checkDataHazard(instruction_keys[3],prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_instruction_rd))
+                writefile<<nop<<endl;
+                writefile<<nop<<endl;
+            }else if (checkDataHazard(instruction_keys[3],prev_prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_prev_instruction_rd))
             {
                 writefile<<nop<<endl;
                 writefile<<nop<<endl;
@@ -104,11 +121,13 @@ int main(int argc, char const *argv[])
         else if ((!instruction_keys[0].compare("AND"))||(!instruction_keys[0].compare("ADD"))||(!instruction_keys[0].compare("OR"))||(!instruction_keys[0].compare("SLL"))||(!instruction_keys[0].compare("SLT"))||(!instruction_keys[0].compare("SLTUU"))||(!instruction_keys[0].compare("SRA"))||(!instruction_keys[0].compare("SRL"))||(!instruction_keys[0].compare("SUB"))||(!instruction_keys[0].compare("XOR")))
         {
             binary_instruction=getRtypeinstruction(instruction_keys[0],instruction_keys[3],instruction_keys[2],instruction_keys[1]);
-            if (checkDataHazard(instruction_keys[3],prev_prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_prev_instruction_rd))
+            
+            if (checkDataHazard(instruction_keys[3],prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_instruction_rd))
             {
                 writefile<<nop<<endl;
-            }
-            else if (checkDataHazard(instruction_keys[3],prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_instruction_rd))
+                writefile<<nop<<endl;
+                writefile<<nop<<endl;
+            }else if (checkDataHazard(instruction_keys[3],prev_prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_prev_instruction_rd))
             {
                 writefile<<nop<<endl;
                 writefile<<nop<<endl;
@@ -120,11 +139,13 @@ int main(int argc, char const *argv[])
         else if ((!instruction_keys[0].compare("SB"))||(!instruction_keys[0].compare("SH"))||(!instruction_keys[0].compare("SW")))
         {
             binary_instruction=getStypeinstruction(instruction_keys[0],instruction_keys[1],instruction_keys[2],instruction_keys[3]);
-            if (checkDataHazard(instruction_keys[1],prev_prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_prev_instruction_rd))
+            
+            if (checkDataHazard(instruction_keys[1],prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_instruction_rd))
             {
                 writefile<<nop<<endl;
-            }
-            else if (checkDataHazard(instruction_keys[1],prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_instruction_rd))
+                writefile<<nop<<endl;
+                writefile<<nop<<endl;
+            }else if (checkDataHazard(instruction_keys[1],prev_prev_instruction_rd)||checkDataHazard(instruction_keys[2],prev_prev_instruction_rd))
             {
                 writefile<<nop<<endl;
                 writefile<<nop<<endl;
@@ -137,25 +158,39 @@ int main(int argc, char const *argv[])
             writefile<<binary_instruction<<endl;
             writefile<<nop<<endl;
             writefile<<nop<<endl;
+            prev_prev_instruction_rd="";
+            prev_instruction_rd="";
         }
         else{
             binary_instruction=getItypeinstruction(instruction_keys[0],instruction_keys[2],instruction_keys[3],instruction_keys[1]);
             if (binary_instruction.empty())
             {
+                cout<<"Invalid instruction"<<endl;
                 throw "Invalid instruction";
             }
-            if (checkDataHazard(instruction_keys[2],prev_prev_instruction_rd))
-            {
-                writefile<<nop<<endl;
-            }
-            else if (checkDataHazard(instruction_keys[2],prev_instruction_rd))
+            
+            if (checkDataHazard(instruction_keys[2],prev_instruction_rd))
             {
                 writefile<<nop<<endl;
                 writefile<<nop<<endl;
+                writefile<<nop<<endl;
+            }else if (checkDataHazard(instruction_keys[2],prev_prev_instruction_rd))
+            {
+                writefile<<nop<<endl;
+                writefile<<nop<<endl;
             }
-            prev_prev_instruction_rd=prev_instruction_rd;
-            prev_instruction_rd=instruction_keys[1];
-            writefile<<binary_instruction<<endl;
+            if(!instruction_keys[0].compare("JALR"))){
+                prev_prev_instruction_rd="";
+                prev_instruction_rd="";
+                writefile<<nop<<endl;
+                writefile<<nop<<endl;
+                writefile<<binary_instruction<<endl;
+            }else{
+                prev_prev_instruction_rd=prev_instruction_rd;
+                prev_instruction_rd=instruction_keys[1];
+                writefile<<binary_instruction<<endl;
+            }
+
         }
         
     }
@@ -452,6 +487,7 @@ string getRegisterValue(string reg)
             return value;
         }
     }
+    cout<<"Invalid Register value"<<endl;
     throw "Invalid Register value";
 }
 
@@ -459,6 +495,7 @@ string hexaToBinaryConverter(string hexvalue, int noOfHexBits)
 {
     if (!((hexvalue[0] == '0') && (hexvalue[1] == 'x') && (hexvalue.length() == noOfHexBits + 2)))
     {
+        cout<<"Invalid hex value"<<endl;
         throw "Invalid hex value ";
     }
 
@@ -532,6 +569,7 @@ string hexaToBinaryConverter(string hexvalue, int noOfHexBits)
         }
         else
         {
+            cout<<"Invalid hex value"<<endl;
             throw "Invalid hex value ";
         }
     }
