@@ -23,7 +23,6 @@ end
 
 always @(reset)begin
     if(reset == 1'b1) begin 
-        Instr_out   <= 0;
         Insthit_out <= 0;
     end
 end
@@ -97,6 +96,7 @@ end
 //waht should happen when reset????
 always @(reset)begin
     if(reset == 1'b1) begin 
+        Insthit_out <= 0;
     end
 end
 
@@ -153,6 +153,7 @@ end
 //what should happen when reset????
 always @(reset)begin
     if(reset == 1'b1) begin
+        Insthit_out <= 0;
     end
 end
 
@@ -200,6 +201,7 @@ end
 //what should happen when reset????
 always @(reset)begin
     if(reset == 1'b1) begin 
+        Insthit_out <= 0;
     end
 end
 
