@@ -25,19 +25,22 @@ begin
     readaccess = 0;
 
     // Sample program given below. You may hardcode your software program here, or load it from a file:
-         {memory_array[32'd3],  memory_array[32'd2],  memory_array[32'd1],  memory_array[32'd0]} <= 32'b10001111000100001000000010010011;           
-         {memory_array[32'd7],  memory_array[32'd6],  memory_array[32'd5],  memory_array[32'd4]} <= 32'b10001111000110001000100010010011;           
-         {memory_array[32'd11], memory_array[32'd10], memory_array[32'd9],  memory_array[32'd8]} <= 32'b00000000000000000000000000000000;         
-         {memory_array[32'd15], memory_array[32'd14], memory_array[32'd13], memory_array[32'd12]} <= 32'b00000000000000000000000000000000;       
-         {memory_array[32'd19], memory_array[32'd18], memory_array[32'd17], memory_array[32'd16]} <= 32'b10000000000010001110011000010011;       
+         {memory_array[32'd03], memory_array[32'd02], memory_array[32'd01], memory_array[32'd00]} <= 32'b10001111000100001000000010010011;           
+         {memory_array[32'd07], memory_array[32'd06], memory_array[32'd05], memory_array[32'd04]} <= 32'b00000000000000000000000000000000;           
+         {memory_array[32'd11], memory_array[32'd10], memory_array[32'd09], memory_array[32'd08]} <= 32'b00000000000000000000000000000000;         
+         {memory_array[32'd15], memory_array[32'd14], memory_array[32'd13], memory_array[32'd12]} <= 32'b00000000000000001111011000010011;       
+         {memory_array[32'd19], memory_array[32'd18], memory_array[32'd17], memory_array[32'd16]} <= 32'b00000000000000000000000000000000;       
          {memory_array[32'd23], memory_array[32'd22], memory_array[32'd21], memory_array[32'd20]} <= 32'b00000000000000000000000000000000;       
-         {memory_array[32'd27], memory_array[32'd26], memory_array[32'd25], memory_array[32'd24]} <= 32'b00000000101110001111011010110011;       
+         {memory_array[32'd27], memory_array[32'd26], memory_array[32'd25], memory_array[32'd24]} <= 32'b00000000000101100000000010100011;       
          {memory_array[32'd31], memory_array[32'd30], memory_array[32'd29], memory_array[32'd28]} <= 32'b00000000000000000000000000000000;      
          {memory_array[32'd35], memory_array[32'd34], memory_array[32'd33], memory_array[32'd32]} <= 32'b00000000000000000000000000000000;
-         {memory_array[32'd39], memory_array[32'd38], memory_array[32'd37], memory_array[32'd36]} <= 32'b00000000000101101000011000000011;
-         {memory_array[32'd43], memory_array[32'd42], memory_array[32'd41], memory_array[32'd40]} <= 32'b00000010010100100000010001100011;
-         {memory_array[32'd47], memory_array[32'd46], memory_array[32'd45], memory_array[32'd44]} <= 32'b00000000000000000000000000000000;
-         {memory_array[32'd51], memory_array[32'd50], memory_array[32'd49], memory_array[32'd48]} <= 32'b00000000000000000000000000000000;
+         {memory_array[32'd39], memory_array[32'd38], memory_array[32'd37], memory_array[32'd36]} <= 32'b11110010001101100000000100000011;
+         {memory_array[32'd43], memory_array[32'd42], memory_array[32'd41], memory_array[32'd40]} <= 32'b00000000000000000000000000000000;
+         {memory_array[32'd47], memory_array[32'd46], memory_array[32'd45], memory_array[32'd44]} <= 32'b11110010110000001010000110100011;
+         {memory_array[32'd51], memory_array[32'd50], memory_array[32'd49], memory_array[32'd48]} <= 32'b11110010001100001010011010000011;
+         {memory_array[32'd55], memory_array[32'd54], memory_array[32'd53], memory_array[32'd52]} <= 32'b00000000000000000000000000000000;
+         {memory_array[32'd59], memory_array[32'd58], memory_array[32'd57], memory_array[32'd56]} <= 32'b00000000000000000000000000000000;
+         {memory_array[32'd63], memory_array[32'd62], memory_array[32'd61], memory_array[32'd60]} <= 32'b11110010110100001010000110100011;
 end
 
 //ADDI x1,x1,0x8F1
@@ -46,6 +49,48 @@ end
 //AND x13,x17,x11
 //LB x12,0x001(x13)
 //BEQ x4,x5,0x014
+
+
+// ADDI x1,x1,0x8F1
+// ORI x12,x1,0x800
+// SB x1,0xF23(x12)
+// SW x12,0xF23(x1)
+// LB x2,0xF23(x12)
+// LW x13,0xF23(x1)
+
+
+
+
+
+// ADDI x1,x1,0x8F1
+// ANDI x12,x1,0x000 
+
+// SB x1,0x001(x12)  
+
+// LB x2,0xF23(x12) 
+// SW  x12,0xF23(x1) 
+// LW x13,0xF23(x1)
+// SW  x13,0xF23(x1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //Detecting an incoming memory access
 always @(read)
