@@ -12,7 +12,7 @@ output reg [31:0] nextPC_out,PC_out,Instr_out;
 output reg Insthit_out; 
 
 always @(posedge clock ) begin
-    #1                                                 //register read delay
+    #3                                                 //register read delay
     if (!busywait)begin
         nextPC_out  <= nextPC;
         PC_out      <= PC;
@@ -70,7 +70,7 @@ output reg [1:0]  mux_4_sel_out;
 output reg        mux_5_sel_out,writeEnable_out,mux_3_sel_out,memWrite_out,memRead_out,branch_out,jump_out,mux_1_sel_out,Insthit_out;
 
 always @(posedge clock ) begin
-    #1                                                 //register read delay
+    #3                                                 //register read delay
     if (!busywait)begin
         nextPC_out <= nextPC;
         PC_out     <= PC;
@@ -136,7 +136,7 @@ output reg [2:0]  Funct3_out;
 output reg        writeEnable_out,mux_3_sel_out,memWrite_out,memRead_out,Insthit_out;
 
 always @(posedge clock ) begin
-    #1                                                 //register read delay
+    #3                                                 //register read delay
     if (!busywait)begin
         data2_out           <= data2;
         ALUout_out          <= ALUout;
@@ -189,7 +189,7 @@ output reg [4:0]  des_register_out;
 output reg        writeEnable_out,mux_3_sel_out,Insthit_out;
 
 always @(posedge clock ) begin
-    #1                                                 //register read delay
+    #3                                                 //register read delay
         dmem_out_out        <= dmem_out;
         ALUout_out          <= ALUout;
         des_register_out    <= des_register;
