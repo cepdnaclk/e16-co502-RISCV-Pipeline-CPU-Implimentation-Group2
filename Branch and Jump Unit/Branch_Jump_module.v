@@ -40,7 +40,7 @@ always @(RESET)begin
 end
 
 always @(*) begin
-    #1                                     //register write delay
+    #2                                     //register write delay
     if (jump_signal==1'b1) begin
         Branch_jump_PC_OUT=Alu_Jump_imm;
     end
