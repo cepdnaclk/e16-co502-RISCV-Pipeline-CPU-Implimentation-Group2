@@ -105,8 +105,8 @@ module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
                 mux1_select = 1'b0;
                 mux2_select = 3'b000;
                 mux3_select = 1'bx;
-                mux4_select = 2'b01;
-                mux5_select = 1'b0;
+                mux4_select = 2'bxx;
+                mux5_select = 1'b1;
                 writeEnable = 1'b0;
                 memRead = 1'b0;
                 memWrite = 1'b0;
@@ -144,7 +144,7 @@ module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
             7'b0010011:begin 		//I type instructions
                 #1                                          //delay occured by combinational logic
                 instr_type = 4'b0111;
-                mux1_select = 1'b1;
+                mux1_select = 1'b0;
                 mux2_select = 3'b010;
                 mux3_select = 1'b0;
                 mux4_select = 2'b01;
@@ -164,6 +164,20 @@ module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
                 mux4_select = 2'b01;
                 mux5_select = 1'b1;
                 writeEnable = 1'b1;
+                memRead = 1'b0;
+                memWrite = 1'b0;
+                branch      = 1'b0;
+                jump        = 1'b0;
+				end
+            7'b0000000:begin 		//nop instruction
+                #1                                          //delay occured by combinational logic
+                instr_type = 4'b1001;
+                mux1_select = 1'bx;
+                mux2_select = 3'bxxx;
+                mux3_select = 1'bx;
+                mux4_select = 2'bxx;
+                mux5_select = 1'bx;
+                writeEnable = 1'b0;
                 memRead = 1'b0;
                 memWrite = 1'b0;
                 branch      = 1'b0;
@@ -311,6 +325,9 @@ module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
             end
             9'b011011000: begin              //REMU  //                         
                 AlUop         = 5'b01111;
+            end
+            9'b000001001: begin              //nop  //                         
+                AlUop         = 5'bxxxxx;
             end
         endcase       
     end
