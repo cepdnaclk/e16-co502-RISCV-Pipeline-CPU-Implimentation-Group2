@@ -29,12 +29,13 @@ end
 
 // incrementing PC by 4 to get next PC value
 always @(PC) begin
+    #2                              //adder delay
     INCREMENTED_PC_by_four=PC+4;
 end
 
 
 always @(posedge CLK) begin //update the pc value depend on the positive clock edge
-    #1                         //!delay updated because PC wont update as soon as busywait zeroed
+    #2                         //!delay updated because PC wont update as soon as busywait zeroed
     if(busywait == 1'b0)begin //update the pc when only busywait is zero 
         case (jump_branch_signal)
             1'b1:begin
