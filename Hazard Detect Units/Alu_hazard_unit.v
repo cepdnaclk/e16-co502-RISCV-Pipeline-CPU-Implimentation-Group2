@@ -40,8 +40,10 @@ end
 
 always @(reset) begin
 	if(RESET==1'b1) begin
-        forward_enable_from_mem_stage_signal=0;
-        forward_enable_from_wb_stage_signal=0;	                        
+        forward_enable_to_rs1_from_mem_stage_signal=0;
+        forward_enable_to_rs2_from_mem_stage_signal=0;
+        forward_enable_to_rs1_from_wb_stage_signal=0;
+        forward_enable_to_rs2_from_wb_stage_signal=0;	                        
 	end
 end
 
