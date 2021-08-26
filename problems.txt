@@ -5,3 +5,6 @@ how the rest of the bits should be filled. don't care or 0.
     the posedge of the next clock cycle.
     if pipeline registers are configured to posedge of clock cycle there should be time delay after that the other modules 
     should work. 
+
+3) pipeline register read and write #1 and register file write #4. is this acceptable. if pipeline register read and write is
+   larger than this then no problem occur and no need to configure to negative edge to occur write operation

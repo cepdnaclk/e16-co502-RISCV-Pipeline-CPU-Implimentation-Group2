@@ -64,8 +64,9 @@ end
 
 wire comparatorOut;
 wire hit,dirty;
-assign comparatorOut = (Tag == cacheTag[Index])? 1:0;     //compare tags to check wether theres an entry in the cache memory_array
-assign hit =  (comparatorOut && cacheValid[Index])? 1:0;  //resolve hit state when tag matches and entry is valid
+//register comapring delay will be #1
+assign #4 comparatorOut = (Tag == cacheTag[Index])? 1:0;     //compare tags to check wether theres an entry in the cache memory_array
+assign #1 hit =  (comparatorOut && cacheValid[Index])? 1:0;  //resolve hit state when tag matches and entry is valid
 
 /*for future usage*/
 assign dirty = cacheDirty[Index];
@@ -100,6 +101,7 @@ reg Busywait;
 reg readaccess, writeaccess;
 always @(read, write)
 begin
+    #1
     if(Inst_hit)begin                            //checking Inst_hit is asserted
     Busywait = (read || write)? 1 : 0;               
     readaccess = (read && !write)? 1 : 0;
@@ -109,7 +111,7 @@ end
 
 
 /* to set busywait to zero when a hit occured */
-always@(posedge clock)begin
+always@(negedge clock)begin  
  if (readaccess && hit)
     begin
     Busywait = 1'b0;                                
@@ -117,7 +119,7 @@ always@(posedge clock)begin
  else if (writeaccess && hit)   
     begin
     Busywait = 1'b0;                                
-    #1   
+    #2   
     cacheDirty[Index] = 1'b1;            //setting dirty bit to 1,this is the only place where dirty bit is set to 1                                //here cache write undergo even after busywait set to zero  
 
     case(Offset)                         //then set the input data into correct place in the cache block  
@@ -136,7 +138,7 @@ and set valid bit to 1 and dirty bit to zero */
 always@(mem_BusyWait)begin
     if(!mem_BusyWait)
     begin
-    #1
+    #2
 	cache[Index] = mem_Readdata;
     cacheValid[Index] = 1'b1;
     cacheDirty[Index] = 1'b0;
