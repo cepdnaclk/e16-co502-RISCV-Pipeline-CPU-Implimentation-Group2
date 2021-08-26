@@ -20,15 +20,15 @@ wire [4:0] alu_rs1_xnor_wire,alu_rs2_xnor_wire,mem_rs1_xnor_wire,mem_rs2_xnor_wi
 wire alu_rs_1comparing,alu_rs_2comparing,mem_rs1comparing,mem_rs2comparing;
 
 
-assign alu_rs1_xnor_wire=(destination_address_alu_stage~^rs1_address_if_stage);
-assign alu_rs2_xnor_wire=(destination_address_alu_stage~^rs1_address_if_stage);
-assign alu_rs_1comparing= (&alu_rs1_xnor_wire);   
-assign alu_rs_2comparing= (&alu_rs2_xnor_wire);
+assign #1 alu_rs1_xnor_wire=(destination_address_alu_stage~^rs1_address_if_stage);
+assign #1 alu_rs2_xnor_wire=(destination_address_alu_stage~^rs1_address_if_stage);
+assign #1 alu_rs_1comparing= (&alu_rs1_xnor_wire);   
+assign #1 alu_rs_2comparing= (&alu_rs2_xnor_wire);
 
-assign mem_rs1_xnor_wire=(destination_address_mem_stage~^rs1_address_if_stage);
-assign mem_rs2_xnor_wire=(destination_address_mem_stage~^rs1_address_if_stage);
-assign mem_rs1comparing= (&mem_rs1_xnor_wire);   
-assign mem_rs2comparing= (&mem_rs2_xnor_wire);
+assign #1 mem_rs1_xnor_wire=(destination_address_mem_stage~^rs1_address_if_stage);
+assign #1 mem_rs2_xnor_wire=(destination_address_mem_stage~^rs1_address_if_stage);
+assign #1 mem_rs1comparing= (&mem_rs1_xnor_wire);   
+assign #1 mem_rs2comparing= (&mem_rs2_xnor_wire);
 
 
 always @(posedge clk) begin
@@ -40,10 +40,10 @@ end
 
 always @(reset) begin
 	if(RESET==1'b1) begin
-        forward_enable_to_rs1_from_mem_stage_signal=0;
-        forward_enable_to_rs2_from_mem_stage_signal=0;
-        forward_enable_to_rs1_from_wb_stage_signal=0;
-        forward_enable_to_rs2_from_wb_stage_signal=0;	                        
+        forward_enable_to_rs1_from_mem_stage_signal=1'b0;
+        forward_enable_to_rs2_from_mem_stage_signal=1'b0;
+        forward_enable_to_rs1_from_wb_stage_signal=1'b0;
+        forward_enable_to_rs2_from_wb_stage_signal=1'b0;	                        
 	end
 end
 
