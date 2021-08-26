@@ -20,7 +20,7 @@ output reg enable_rs1_forward_from_wb,enable_rs2_forward_from_wb,enable_bubble;
 wire [4:0] if_rs1_xnor_wire,if_rs2_xnor_wire,alu_rs1_xnor_wire,alu_rs2_xnor_wire;
 wire if_rs_1comparing,if_rs_2comparing,alu_rs1comparing,alu_rs2comparing,buble;
 
-
+// Has to remove this part additional beacuse alu hazard unit also cover
 assign #1 if_rs2_xnor_wire=(Memstage_Rd~^IFstage_Rs2);
 assign #1 if_rs1_xnor_wire=(Memstage_Rd~^IFstage_Rs1);
 assign #1 if_rs_1comparing= (&if_rs1_xnor_wire);   
