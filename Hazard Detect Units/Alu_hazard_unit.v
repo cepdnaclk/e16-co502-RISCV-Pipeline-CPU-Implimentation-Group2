@@ -12,7 +12,7 @@ module Alu_hazard_unit (
 );
 
 input clk,reset;
-input [4:0]    destination_address_mem_stage,destination_address_alu_stage,rs1_address_if_stage,rs2_address_if_stage,;
+input [4:0]    destination_address_mem_stage,destination_address_alu_stage,rs1_address_if_stage,rs2_address_if_stage;
 
 output reg forward_enable_to_rs1_from_mem_stage_signal,forward_enable_to_rs2_from_mem_stage_signal,forward_enable_to_rs1_from_wb_stage_signal,forward_enable_to_rs2_from_wb_stage_signal;
 

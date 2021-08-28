@@ -11,7 +11,7 @@ module Branch_hazard_unit (
 
 input [2:0] ID_pc,ALU_pc;
 input reset,ID_stage_branch,ALU_stage_branch,ALU_stage_branch_result;
-output flush,early_prediction_is_branch_taken,signal_to_take_branch;
+output reg flush,early_prediction_is_branch_taken,signal_to_take_branch;
 reg  [1:0] prediction[0:7];                 //branch target buffer
 
 

@@ -30,7 +30,7 @@ assign #1 alu_rs1_xnor_wire=(Memstage_Rd~^ALustage_Rs1);
 assign #1 alu_rs2_xnor_wire=(Memstage_Rd~^ALustage_Rs2);
 assign #1 alu_rs1comparing= (&alu_rs1_xnor_wire);   
 assign #1 alu_rs2comparing= (&alu_rs2_xnor_wire);
-assign #1 buble=alu_rs1comparing | alu_rs_2comparing;
+assign #1 buble=alu_rs1comparing | alu_rs2comparing;
 
 always @(posedge clk) begin
     if (load_signal) begin
