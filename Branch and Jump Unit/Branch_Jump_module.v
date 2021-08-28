@@ -2,8 +2,7 @@
 
 module Branch_jump_module (
     RESET,
-    PC,
-    Branch_imm,
+    Branch_address,
     Alu_Jump_imm,
     func_3,
     branch_signal,
@@ -15,7 +14,7 @@ module Branch_jump_module (
     branch_jump_mux_signal
 );
 
-input [31:0] PC,Branch_imm,Alu_Jump_imm;
+input [31:0] Branch_address,Alu_Jump_imm;
 input [2:0] func_3;
 input RESET,branch_signal,jump_signal,zero_signal,sign_bit_signal,sltu_bit_signal;
 
@@ -45,8 +44,7 @@ always @(*) begin
         Branch_jump_PC_OUT=Alu_Jump_imm;
     end
     else begin
-        #2                                  //adder delay
-        Branch_jump_PC_OUT=PC+Branch_imm;
+        Branch_jump_PC_OUT=Branch_address;
     end
 end
     

@@ -79,20 +79,20 @@ assign dirty = cacheDirty[Index];
 // multiplexerType4   group2_dataExtractMux(data[7:0],data[15:8],data[23:16],data[31:24],dataExtractMuxOut,Offset);
 // wire readdata;
 // assign #1 readdata = dataExtractMuxOut;
-reg[31:0] dataExtract;      
+reg[31:0] readdata;      
 wire[127:0] data;
 assign data = cache[Index];
 always @(*)
 begin
     case(Offset)        //!relevent 32 bits are selected
-    2'b00: dataExtract = data[31:0] ;
-    2'b01: dataExtract = data[63:32] ;
-    2'b10: dataExtract = data[95:64] ;
-    2'b11: dataExtract = data[127:96] ;
+    2'b00: readdata = data[31:0] ;
+    2'b01: readdata = data[63:32] ;
+    2'b10: readdata = data[95:64] ;
+    2'b11: readdata = data[127:96] ;
     endcase
 end
-wire readdata;
-assign #1 readdata = dataExtract;
+// wire readdata;
+// assign #1 readdata = readdata;
 
 
 

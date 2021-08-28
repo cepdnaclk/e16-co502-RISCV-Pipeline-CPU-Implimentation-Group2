@@ -1,4 +1,5 @@
 `timescale  1ns/100ps
+
 module instructionCache(
 	clock,
     reset,
@@ -67,20 +68,21 @@ assign #1 hit =  (comparatorOut && cacheValid[Index])? 1:0;  //resolve hit state
 // wire[31:0] readInstruction;
 // assign #1 readInstruction = instructionExtractMuxOut;
 
-reg[31:0] instExtract;      //!check this
+reg[31:0] readInstruction;      //!check this
 wire[127:0] data;
 assign data = cache[Index];
 always @(*)
 begin
+    #1
     case(Offset)                           //relevent 32 bits are selected
-    2'b00: instExtract = data[31:0] ;
-    2'b01: instExtract = data[63:32] ;
-    2'b10: instExtract = data[95:64] ;
-    2'b11: instExtract = data[127:96] ;
+    2'b00: readInstruction = data[31:0] ;
+    2'b01: readInstruction = data[63:32] ;
+    2'b10: readInstruction = data[95:64] ;
+    2'b11: readInstruction = data[127:96] ;
     endcase
 end
-wire readInstruction;
-assign #1 readInstruction = instExtract;
+// wire readInstruction;
+// assign #1 readInstruction = readInstruction;
 
 /*set busywait whenever an address signal received*/
 reg Busywait;                                        

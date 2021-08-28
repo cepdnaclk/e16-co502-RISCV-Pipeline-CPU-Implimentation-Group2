@@ -17,10 +17,10 @@ module controlUnit(Instruction,mux1_select,mux2_select,mux3_select,mux4_select,m
     wire [2:0] funct3;
     wire funct7_A,funct7_B;
     reg [1:0] mux4_select;                                
-    reg mux1_select,mux2_select,mux3_select,
+    reg mux1_select,mux3_select,
             mux5_select,memRead,memWrite,branch,jump,writeEnable;
     wire [8:0] specific_OP;
-    reg  [2:0] Immidiate;
+    reg  [2:0] Immidiate,mux2_select;
     reg  [3:0] instr_type;
     reg  [4:0] AlUop;
 
