@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 module Load_use_hazard_unit (
     clk,
     reset,
@@ -30,7 +32,7 @@ assign #1 alu_rs1_xnor_wire=(Memstage_Rd~^ALustage_Rs1);
 assign #1 alu_rs2_xnor_wire=(Memstage_Rd~^ALustage_Rs2);
 assign #1 alu_rs1comparing= (&alu_rs1_xnor_wire);   
 assign #1 alu_rs2comparing= (&alu_rs2_xnor_wire);
-assign #1 buble=alu_rs1comparing | alu_rs2comparing;
+assign #1 buble=alu_rs1comparing | alu_rs2comparing;   //bubble introduced to the pipeline(this is unavoidable)
 
 always @(posedge clk) begin
     if (load_signal) begin

@@ -1,3 +1,5 @@
+`timescale  1ns/100ps
+
 module Branch_hazard_unit (
     ID_pc,ALU_pc,
     reset,
@@ -6,7 +8,7 @@ module Branch_hazard_unit (
     ALU_stage_branch_result,
     flush,
     early_prediction_is_branch_taken,
-    signal_to_take_branch,
+    signal_to_take_branch
 );
 
 input [2:0] ID_pc,ALU_pc;
