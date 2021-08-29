@@ -1,4 +1,5 @@
 `timescale  1ns/100ps
+
 module instructionCache(
 	clock,
     reset,
@@ -36,7 +37,7 @@ reg[24:0] Tag;
 
 /* dividing address to respective tag index and offset Asynchronously */
 always@(PC) begin
- #1
+ #2
  if(!PC[31])begin
     Offset <= PC[3:2];
     Index <= PC[6:4];
@@ -54,8 +55,9 @@ end
 
 wire comparatorOut;
 wire hit,dirty;
-assign comparatorOut = (Tag == cacheTag[Index])? 1:0;     //compare tags to check wether theres an entry in the cache memory_array
-assign hit =  (comparatorOut && cacheValid[Index])? 1:0;  //resolve hit state when tag matches and entry is valid
+//register comparison delay will be #1 unit delay
+assign #4 comparatorOut = (Tag == cacheTag[Index])? 1:0;     //compare tags to check wether theres an entry in the cache memory_array
+assign #1 hit =  (comparatorOut && cacheValid[Index])? 1:0;  //resolve hit state when tag matches and entry is valid
 
 
 /*Asynchronous instruction extraction and assigning*/
@@ -66,20 +68,21 @@ assign hit =  (comparatorOut && cacheValid[Index])? 1:0;  //resolve hit state wh
 // wire[31:0] readInstruction;
 // assign #1 readInstruction = instructionExtractMuxOut;
 
-reg[31:0] instExtract;      //!check this
+reg[31:0] readInstruction;      //!check this
 wire[127:0] data;
 assign data = cache[Index];
 always @(*)
 begin
+    #1
     case(Offset)                           //relevent 32 bits are selected
-    2'b00: instExtract = data[31:0] ;
-    2'b01: instExtract = data[63:32] ;
-    2'b10: instExtract = data[95:64] ;
-    2'b11: instExtract = data[127:96] ;
+    2'b00: readInstruction = data[31:0] ;
+    2'b01: readInstruction = data[63:32] ;
+    2'b10: readInstruction = data[95:64] ;
+    2'b11: readInstruction = data[127:96] ;
     endcase
 end
-wire readInstruction;
-assign #1 readInstruction = instExtract;
+// wire readInstruction;
+// assign #1 readInstruction = readInstruction;
 
 /*set busywait whenever an address signal received*/
 reg Busywait;                                        
@@ -103,7 +106,7 @@ and set valid bit to 1*/
 always@(mem_BusyWait)begin
     if(!mem_BusyWait)
     begin
-    #1
+    #2
 	cache[Index] = mem_Readdata;
     cacheValid[Index] = 1'b1;
     cacheTag[Index] = Tag;
@@ -112,7 +115,7 @@ end
 
 /* cache controller to handle instruction memory control signals(mem_Read etc) whenever a miss occured in instruction cachememory */
 wire ControllerBusywait;                                  
-instructionCacheCTRL    e16203_instructionCacheCTRL(clock,reset,ControllerBusywait,mem_BusyWait,Tag,Index,hit,mem_Read,mem_Address);
+instructionCacheCTRL    group2_instructionCacheCTRL(clock,reset,ControllerBusywait,mem_BusyWait,Tag,Index,hit,mem_Read,mem_Address);
 
 /* overall busywait is set to zero whenever cachecontroller busywait and cachememory busywait both set to zero */
 wire busywait;                                           

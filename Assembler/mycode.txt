@@ -1,3 +1,6 @@
-AND x12,x17,x18
-LB x12,0x001(x13)
-BEQ x4,x5,0x014
+ADDI x1,x1,0x8F1
+ORI x12,x1,0x800
+SB x1,0xF23(x12)
+SW x12,0xF23(x1)
+LB x2,0xF23(x12)
+LW x13,0xF23(x1)
