@@ -15,6 +15,7 @@ string getUtypeinstruction(string, string, string);
 string getJtypeinstruction(string, string);
 string getMtypeinstruction(string, string, string, string);
 string getBtypeinstruction(string, string, string, string);
+bool hazardDetect(vector<string> ,string ,string ,int );
 
 
 int main(int argc, char const *argv[])
@@ -33,12 +34,14 @@ int main(int argc, char const *argv[])
     {
         writefile.open("output.hex");
     }
+    vector<string> prev_instruction={};
     ifstream readfile(argv[1]);
     string line,operand;
     bool line_comment_found=false;
     bool operand_found=false;
     size_t pos = 0;  
     string delim=" ";
+    string nop="00000000000000000000000000000000";
     while (getline(readfile, line)){
         vector<string> instruction_keys;
         operand="";
@@ -58,8 +61,20 @@ int main(int argc, char const *argv[])
             {
                 if (line[i]==' ' || line[i]=='\0' || line[i]=='\n' || (line.length()==i+1)||line[i]==','||line[i]=='(' ||line[i]==')')
                 {
+                    if (line.length()==i+1 && line[i]!=' ' && line[i]!='\0' && line[i]!='\n' && line[i]!=','&& line[i]&&'(' &&line[i]!=')')
+                    {
+                        operand=operand+line[i];
+                    }
+                    if (line[i]==')')
+                    {
+                        string temp = instruction_keys[instruction_keys.size()-1];
+                        instruction_keys.pop_back();
+                        instruction_keys.push_back(operand);
+                        instruction_keys.push_back(temp);
+                    }else{
+                        instruction_keys.push_back(operand);
+                    }
                     operand_found=false;
-                    instruction_keys.push_back(operand);
                     operand="";
                 }else
                 {
@@ -78,6 +93,7 @@ int main(int argc, char const *argv[])
         {
             continue;
         }
+        
         string binary_instruction;
 
         if ((!instruction_keys[0].compare("LUI"))||(!instruction_keys[0].compare("AUIPC")))
@@ -94,35 +110,58 @@ int main(int argc, char const *argv[])
         else if ((!instruction_keys[0].compare("MUL"))||(!instruction_keys[0].compare("MULH"))||(!instruction_keys[0].compare("MULHSU"))||(!instruction_keys[0].compare("MULHU"))||(!instruction_keys[0].compare("DIV"))||(!instruction_keys[0].compare("DIVU"))||(!instruction_keys[0].compare("REM"))||(!instruction_keys[0].compare("REMU")))
         {
             binary_instruction=getMtypeinstruction(instruction_keys[0],instruction_keys[3],instruction_keys[2],instruction_keys[1]);
+            if (hazardDetect(prev_instruction,instruction_keys[3],instruction_keys[2],2))
+            {
+                writefile<<nop<<endl;
+            }
             writefile<<binary_instruction<<endl;
             
         }
         else if ((!instruction_keys[0].compare("AND"))||(!instruction_keys[0].compare("ADD"))||(!instruction_keys[0].compare("OR"))||(!instruction_keys[0].compare("SLL"))||(!instruction_keys[0].compare("SLT"))||(!instruction_keys[0].compare("SLTUU"))||(!instruction_keys[0].compare("SRA"))||(!instruction_keys[0].compare("SRL"))||(!instruction_keys[0].compare("SUB"))||(!instruction_keys[0].compare("XOR")))
         {
             binary_instruction=getRtypeinstruction(instruction_keys[0],instruction_keys[3],instruction_keys[2],instruction_keys[1]);
+            if (hazardDetect(prev_instruction,instruction_keys[3],instruction_keys[2],2))
+            {
+                writefile<<nop<<endl;
+            }
             writefile<<binary_instruction<<endl;
         }
         else if ((!instruction_keys[0].compare("SB"))||(!instruction_keys[0].compare("SH"))||(!instruction_keys[0].compare("SW")))
         {
+            
             binary_instruction=getStypeinstruction(instruction_keys[0],instruction_keys[1],instruction_keys[2],instruction_keys[3]);
+            if (hazardDetect(prev_instruction,instruction_keys[1],instruction_keys[2],2))
+            {
+                writefile<<nop<<endl;
+            }
             writefile<<binary_instruction<<endl;
         }
         else if ((!instruction_keys[0].compare("BEQ"))||(!instruction_keys[0].compare("BGE"))||(!instruction_keys[0].compare("BGEU"))||(!instruction_keys[0].compare("BLT"))||(!instruction_keys[0].compare("BLTU"))||(!instruction_keys[0].compare("BNE")))
         {
             binary_instruction=getBtypeinstruction(instruction_keys[0],instruction_keys[2],instruction_keys[1],instruction_keys[3]);
+            if (hazardDetect(prev_instruction,instruction_keys[1],instruction_keys[2],2))
+            {
+                writefile<<nop<<endl;
+            }
             writefile<<binary_instruction<<endl;
         }
         else{
             binary_instruction=getItypeinstruction(instruction_keys[0],instruction_keys[2],instruction_keys[3],instruction_keys[1]);
+
+            
             if (binary_instruction.empty())
             {
                 cout<<"Invalid instruction"<<endl;
                 throw "Invalid instruction";
             }
-                writefile<<binary_instruction<<endl;
+            if (hazardDetect(prev_instruction,instruction_keys[2],"",1))
+            {
+                writefile<<nop<<endl;
+            }
+            writefile<<binary_instruction<<endl;
 
         }
-        
+        prev_instruction=instruction_keys;  
     }
 
     readfile.close();
@@ -130,6 +169,33 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
+bool hazardDetect(vector<string> prev,string rs1,string rs2,int argc){
+    if (prev.size()<2)
+    {
+        return false;
+    }
+
+    if ((!prev[0].compare("LW")) || (!prev[0].compare("LB")) || (!prev[0].compare("LBU"))|| (!prev[0].compare("LH"))|| (!prev[0].compare("LHU")))
+    {
+        if (argc==2)
+        {
+            if ((!prev[1].compare(rs1))|| (!prev[1].compare(rs2)))
+            {
+               return true;
+            }
+            
+        }else{
+            if (!prev[1].compare(rs1))
+            {
+               return true;
+            }
+        }
+        
+    }
+    
+    return false;
+    
+}
 
 string getMtypeinstruction(string instype, string rs2, string rs1, string rd)
 {
@@ -240,7 +306,7 @@ string getBtypeinstruction(string instype, string rs2, string rs1, string imm)
 
 string getStypeinstruction(string instype, string rs2, string rs1, string imm)
 {
-
+    
     string binary_imm = hexaToBinaryConverter(imm, 3);
     string instruction = binary_imm.substr(7, 5) + "0100011";
 
@@ -266,7 +332,7 @@ string getStypeinstruction(string instype, string rs2, string rs1, string imm)
 
 string getItypeinstruction(string instype, string rs1, string imm, string rd)
 {
-
+    
     string instruction = getRegisterValue(rd) + "0010011";
 
     if (!instype.compare("ADDI"))
@@ -339,6 +405,7 @@ string getItypeinstruction(string instype, string rs1, string imm, string rd)
 
 string getRtypeinstruction(string instype, string rs2, string rs1, string rd)
 {
+   
     string instruction = getRegisterValue(rd) + "0110011";
     if (!instype.compare("ADD"))
     {
@@ -416,6 +483,7 @@ string getRegisterValue(string reg)
 
 string hexaToBinaryConverter(string hexvalue, int noOfHexBits)
 {
+    
     if (!((hexvalue[0] == '0') && (hexvalue[1] == 'x') && (hexvalue.length() == noOfHexBits + 2)))
     {
         cout<<"Invalid hex value"<<endl;

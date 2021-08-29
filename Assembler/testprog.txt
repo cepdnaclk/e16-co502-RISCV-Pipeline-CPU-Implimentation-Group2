@@ -1,9 +1,12 @@
-ADDI x1,x1,0x8F1
-ORI x12,x1,0x800 
+ADDI x1,x1,0x8F2
+ANDI x12,x1,0x000 
+BEQ x1,x12,0x004
+SB x1,0x001(x12)  //asddmk
 
-SB x1,0xF23(x12)  
-
-LB x2,0xF23(x12) 
-SW  x12,0xF23(x1) 
+LB x2,0xF23(x12) //aa
+ SW  x12,0xF23(x2) 
 LW x13,0xF23(x1)
+AND x12,x13,x1 
 SW  x13,0xF23(x1)
+ 
+
