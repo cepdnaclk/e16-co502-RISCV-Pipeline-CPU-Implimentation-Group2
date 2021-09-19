@@ -134,7 +134,7 @@ multiplexer_type1          RiscV_mux10(mux_8_out,mux_9_out,PC_value,flush);
     -----
 */
 //!need to resolve when discussion
-PipelineReg_1             RiscV_pipelineReg1(CLK,RESET,nextPC,PC,Instruction,Insthit,cache_mem_busywait | enable_bubble,nextPC_out_pipe1,PC_out_pipe1,Instr_out_pipe1,Insthit_out_pipe1);
+PipelineReg_1             RiscV_pipelineReg1(CLK,{RESET|flush|jump_out_pipe2|signal_to_take_branch},nextPC,PC,Instruction,Insthit,cache_mem_busywait | enable_bubble,nextPC_out_pipe1,PC_out_pipe1,Instr_out_pipe1,Insthit_out_pipe1);
 
 
 
@@ -147,7 +147,7 @@ controlUnit              RiscV_controlUnit(Instr_out_pipe1,mux1_select,mux2_sele
 reg_file                 RiscV_regfile(CLK,RESET,reg_writedata,OUT1,OUT2,des_register_out_pipe4,Instr_out_pipe1[19:15],Instr_out_pipe1[24:20],writeEnable_out_pipe4,Insthit_out_pipe4);
 Wire_module              RiscV_wireExtentions(Instr_out_pipe1,B_imm,J_imm,S_imm,U_imm,I_imm);
 multiplexer_type2        RiscV_mux2(B_imm,S_imm,I_imm,U_imm,J_imm,mux2_out,mux2_select);
-adder                    RiscV_adder(PC_out_pipe1,B_imm,B_address); 
+adder                    RiscV_adder(PC_out_pipe1,B_imm,B_address);             //!possible error identified
 /* 
     -----
      Pipeline register 2
@@ -198,7 +198,7 @@ alu                      RiscV_alu(DATA1_in,DATA2_in,Alu_RESULT,ALUop_out_pipe2,
 multiplexer_type3        RiscV_mux4(mux_2_out_out_pipe2,Alu_RESULT,nextPC_out_pipe2,mux_4_out,mux_4_sel_out_pipe2);
 Branch_jump_module       RiscV_BJmodule(RESET,B_address_out_pipe2,Alu_RESULT,Funct3_out_pipe2,branch_out_pipe2,jump_out_pipe2,zero_signal,sign_bit_signal,sltu_bit_signal,jump_branch_pc,Branch_condition_and_jump_signal);
 multiplexer_type4        RiscV_mux6(data2_out_pipe2,ALUout_out_pipe3,reg_writedata,ALUout_out_pipe3,mux_6_out,{forward_enable_to_rs1_from_wb_stage_signal|enable_rs1_forward_from_wb,forward_enable_to_rs1_from_mem_stage_signal});
-multiplexer_type4        RiscV_mux7(data1_out_pipe2,ALUout_out_pipe3,reg_writedata,ALUout_out_pipe3,mux_7_out,{forward_enable_to_rs2_from_wb_stage_signal|enable_rs2_forward_from_wb,forward_enable_to_rs2_from_mem_stage_signal});
+multiplexer_type4        RiscV_mux7(data1_out_pipe2,ALUout_out_pipe3,reg_writedata,ALUout_out_pipe3,mux_7_out,{forward_enable_to_rs2_from_wb_stage_signal|enable_rs2_forward_from_wb,forward_enable_to_rs2_from_mem_stage_signal});  //!possible error identified
 
 /* 
     -----
