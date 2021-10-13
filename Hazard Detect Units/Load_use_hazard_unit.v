@@ -28,13 +28,15 @@ wire if_rs_1comparing,if_rs_2comparing,alu_rs1comparing,alu_rs2comparing,buble;
 // assign #1 if_rs_1comparing= (&if_rs1_xnor_wire);   
 // assign #1 if_rs_2comparing= (&if_rs2_xnor_wire);
 
-assign #1 alu_rs1_xnor_wire=(Memstage_Rd~^ALustage_Rs1);
-assign #1 alu_rs2_xnor_wire=(Memstage_Rd~^ALustage_Rs2);
-assign #1 alu_rs1comparing= (&alu_rs1_xnor_wire);   
-assign #1 alu_rs2comparing= (&alu_rs2_xnor_wire);
+//hazard detection (check wether sourse registers and destination registers are equal)
+assign #1 alu_rs1_xnor_wire=(Memstage_Rd~^ALustage_Rs1);   //xnoring
+assign #1 alu_rs2_xnor_wire=(Memstage_Rd~^ALustage_Rs2);   //xnoring
+assign #1 alu_rs1comparing= (&alu_rs1_xnor_wire);          //anding
+assign #1 alu_rs2comparing= (&alu_rs2_xnor_wire);          //anding
 assign #1 buble=alu_rs1comparing | alu_rs2comparing;   //bubble introduced to the pipeline(this is unavoidable)
 
 always @(posedge clk) begin
+    #1                                                //combinational logic delay
     if (load_signal) begin
         enable_rs1_forward_from_wb=alu_rs1comparing;
         enable_rs2_forward_from_wb=alu_rs2comparing;
